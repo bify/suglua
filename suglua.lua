@@ -13,7 +13,7 @@ local colors = {
     lightblue = Color(114, 160, 193),
     grey = Color(155, 155, 155),
     orange = Color(255, 126, 0),
-    purple = Color(160, 32, 240), 
+    purple = Color(160, 32, 240),
     violet = Color(178,132,190),
     seafoam = Color(201, 255, 229),
     black = Color(0, 0, 0),
@@ -28,15 +28,15 @@ local ss = {
 
     bhop = true,
 
-    txtespPLAYER = false,
+    txtespPLAYER = true,
     txtespPROP = false,
 
     chams = true,
     chams_col = Color(255,255,255),
-    chams_a = 255, 
+    chams_a = 255,
     chams_lighting = false,
 
-    pchams = true,
+    pchams = false,
     pchams_col = Color(0,255,255),
     pchams_a = 150,
     pchams_lighting = true,
@@ -44,22 +44,19 @@ local ss = {
     random_col = Color(0,255,255, 255),
 
 
-    hchams_col = Color(0, 255, 255, 255),
-    hands = true,
+    hchams_col = Color(255, 0, 0, 255),
+    hands = false,
 
-    box_col = Color(0, 255, 255, 255),
+    box_col = Color(255, 255, 255, 255),
 
     menu_col = Color(0, 255, 255, 255),
 
     glow_col = Color(0, 255, 255, 255),
 
-    tps = 0,
-    tps_y = 0,
-    tps_h = 0, 
-    tps_collision = false,
+    tps = 1,
     box = false,
 
-    wallsx = true,
+    wallsx = false,
     wallsxb = true,
     wallsxp = false,
 
@@ -69,11 +66,10 @@ local ss = {
     toggle = false,
 
     grabber = false,
-    fullbright = false,
 
     speclist = false,
 
-    nightmode = true,
+    nightmode = false,
 
     crosshair = false,
 
@@ -89,24 +85,35 @@ local ss = {
 
     fillbox = true,
 
-    glow = false,
-    
+    glow = true,
+
     boxesphealth = false,
-    boxesps = false,
+    boxesps = true,
+    keypads = false,
+
+    fire = false,
+
+    swasthair = false,
+    animcham = false,
+
+    hitmarker = false,
+    hitsound = false,
+
+    rainbowphys = false,
+
+
 
     material = 'models/debug/debugwhite',
-    
-    
+    aimpos = 'eyes',
 
- 
     fov = 120,
 }
 --END OF CONFIG SECTION
 
-
+--local noob = surface.CreateFont("", {--[[ tdata here]]})
 
 surface.CreateFont( "Specialneeds", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 15,
     weight = 500,
@@ -124,7 +131,7 @@ surface.CreateFont( "Specialneeds", {
 } )
 
 surface.CreateFont( "titles", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 25,
     weight = 750,
@@ -142,7 +149,7 @@ surface.CreateFont( "titles", {
 } )
 
 surface.CreateFont( "Specialneeds2", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 13,
     weight = 500,
@@ -161,18 +168,16 @@ surface.CreateFont( "Specialneeds2", {
 
 
 local function ConsolePrintRainbow( frequency, str )
-	
 	local text = {}
-	
 	for i = 1, #str do
 		table.insert( text, HSVToColor( i * frequency % 360, 1, 1 ) )
 		table.insert( text, string.sub( str, i, i ) )
 	end
-	
+
+	-- table[table+1] = val
+	-- table[#table+1] = val
 	table.insert( text, "\n" )
-	
 	MsgC( unpack( text ) )
-	
 end
 
 ConsolePrintRainbow( 10, "get good get sugoma! Https://sugoma.solutions/")
@@ -190,13 +195,38 @@ local DebugWhite = Material("models/debug/debugwhite")
 local Wireframe = Material("models/wireframe")
 local IsDrawingWireframe = false
 local lply = LocalPlayer()
-local hooks = {}
 local function RandomString() return tostring(math.random(-9999999999, 9999999999)) end
 
 local function makeHook(txt, fnc)
     local sys,txsz = tostring((util.CRC(math.random(10^4)+SysTime())) )..'',#txt
-    hook.Add(txt,'IRON|'..util.CRC(math.random(10^4)+SysTime()),fnc) 
+    print('Hook added! ['..txt..'] '..('.'):rep((#sys+2-txsz)+20)..sys)
+	local name = 'SS|'..util.CRC(math.random(10^4)+SysTime())
+    hook.Add(txt,name,fnc)
 end
+
+local function dumphooks()
+    for k,v in pairs(hook.GetTable()) do
+        for k1,v1 in pairs(v) do
+            if string.find(tostring(k1),'SS|') then
+                print("hook:", k, k1)
+            end
+        end
+    end
+end
+
+concommand.Add("dumphooks", dumphooks)
+
+local function unload()
+    for k,v in pairs(hook.GetTable()) do
+        for k1,v1 in pairs(v) do
+            if string.find(tostring(k1),'SS|') then
+            	hook.Remove(k,k1)
+            	print("unloaded: ", k, k1)
+            end
+        end
+    end
+end
+concommand.Add("unload", unload)
 
 local dbg = {
     view = Angle(),
@@ -213,32 +243,58 @@ local function isValid(object)
     return isvalid( object )
 end
 
-local function AddHook(event, name, func)
-    hooks[name] = event
-    hook.Add(event, name, func)
-end
-
-local function DrawRect(parent, color, color2, w, h, x, y) 
-    if color then 
-        surface.SetDrawColor(color) 
-    else 
-        surface.SetDrawColor(Color(46,46,46,240)) 
+local function DrawRect(parent, color, color2, w, h, x, y)
+    if color then
+        surface.SetDrawColor(color)
+    else
+        surface.SetDrawColor(Color(46,46,46,240))
     end
 
     surface.DrawRect(x or 0, y or 0, w or parent:GetWide(), h or parent:GetTall() )
 
-    if col2 then 
-        surface.SetDrawColor(color2) 
-    else 
-        surface.SetDrawColor(colors.black) 
+    if col2 then
+        surface.SetDrawColor(color2)
+    else
+        surface.SetDrawColor(colors.black)
     end
 
     surface.DrawOutlinedRect(x or 0, y or 0, w or parent:GetWide(), h or parent:GetTall())
 end
 
+local fakeRT = GetRenderTarget( "fakeRT" .. os.time(), ScrW(), ScrH() )
 
+makeHook( "RenderScene", function( vOrigin, vAngle, vFOV )
+    local view = {
+        x = 0,
+        y = 0,
+        w = ScrW(),
+        h = ScrH(),
+        dopostprocess = true,
+        origin = vOrigin,
+        angles = vAngle,
+        fov = vFOV,
+        drawhud = true,
+        drawmonitors = true,
+        drawviewmodel = true
+    }
 
+    render.RenderView( view )
+    render.CopyTexture( nil, fakeRT )
 
+    cam.Start2D()
+        hook.Run( "SHUDPaint" )
+    cam.End2D()
+
+    render.SetRenderTarget( fakeRT )
+
+    return true
+end )
+
+makeHook( "ShutDown", function()
+    render.SetRenderTarget()
+end )
+
+local tply = ss.friends
 
 --[[-------------------------------------------------------------------------
     Menu Element func
@@ -327,7 +383,7 @@ Mixer:SetColor(Color(30,100,160))     -- Set the default color]]
 
 local menuderma
 function SUGUI()
-    menuderma = vgui.Create( "DFrame" )
+    local menuderma = vgui.Create( "DFrame" )
     menuderma:SetSize(  725, 520 )
     menuderma:SetPos( 10, 10 )
     menuderma:SetTitle( " " )
@@ -468,8 +524,15 @@ function SUGUI()
     checkbox("ESP:Head Circle", "its like circle", 'circlehead',440, 220, menuderma )
     checkbox("ESP:Glow", "its like glowing", 'glow',440, 250, menuderma )
     checkbox("CLI:Menu Animate", "its like dance", 'gdance', 580, 335, menuderma )
+    checkbox("CLI:Keypad Logger", "its like Keypads", 'keypads', 580, 365, menuderma )
+    checkbox("CLI:Nightmode", "its like night", 'nightmode', 580, 395, menuderma )
+    checkbox("CLI:Swasthair", "its like german", 'swasthair', 580, 425, menuderma )
+    checkbox("CLI:Animate Hand", "its like hand but anim", 'animcham', 580, 455, menuderma )
+    checkbox("CLI:Gay Physgun", "its like raindno", 'rainbowphys', 580, 485, menuderma )
     checkbox("ESP:2D Box", "Player boxes", 'boxesps', 580, 70, menuderma )
     checkbox("ESP:2D Box(Health)", "Player Boxes", 'boxesphealth', 580, 100, menuderma )
+    checkbox("ESP:Hitmarker", "Player Hitmark", 'hitmarker', 580, 130, menuderma )
+    checkbox("ESP:Hitsound", "Player Hitsound", 'hitsound', 580, 160, menuderma )
     checkbox("ESP:3D Box Fill", "Fill 3D Box ESP", 'fillbox', 440, 190, menuderma )
 
     checkbox("ESP:Ply Walls", "its like view", 'wallsx', 230, 130, menuderma )
@@ -480,14 +543,19 @@ function SUGUI()
 
     checkbox("ESP:Ply Flat", "Toggle PNames", 'chams_lighting', 230, 70, menuderma )
     checkbox("ESP:Prop Flat", "Toggle PNames", 'pchams_lighting', 230, 100, menuderma )
-    checkbox("AIM:Legit Aimlock", "Toggle aimlock", 'toggle', 20, 110, menuderma )
+    --checkbox("AIM:Legit Aimbot", "Toggle aimbot", 'softaimbot', 20, 110, menuderma )
 
     slider( "CLI:FOV", "fov", 1, 170, 230, 335, 190, 20, menuderma)
     slider( "ESP:Ply  A", "chams_a", 1, 255, 230, 230, 190, 20, menuderma)
     slider( "ESP:Prop A", "pchams_a", 1, 255, 230, 260, 190, 20, menuderma)
-    
-    slider('CLI:TP Yaw', 'tps_y', 0, 360, 230, 365, 190, 20, menuderma)
-    slider('CLI:TP Hight', 'tps_h', 0, 100, 230, 395, 190, 20, menuderma)
+
+    slider('CLI:Ddos server', 'tps_y', 0, 360, 230, 365, 190, 20, menuderma)
+    slider('CLI:Get ip', 'tps_h', 0, 100, 230, 395, 190, 20, menuderma)
+
+
+    checkbox("AIM:Fire", "Toggle Aimbot fire", 'fire', 20, 110, menuderma )
+
+
 
     local ptbox = vgui.Create( 'DComboBox', menuderma )
     ptbox:SetPos( 440, 270 )
@@ -503,14 +571,34 @@ function SUGUI()
 
     function ptbox:OnSelect( _, mat )
         ss.material = mat
-    end 
+    end
     function ptbox:Paint()
         draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
     end
+    --[[
+    local ptbox2 = vgui.Create( 'DComboBox', menuderma )
+    ptbox2:SetPos( 90, 107 )
+    ptbox2:SetSize( 90, 20 )
+    ptbox2:SetValue( 'Bone' )
+    ptbox2:AddChoice('nose')
+    ptbox2:AddChoice('eyes')
+    ptbox2:AddChoice('tie')
+    ptbox2:AddChoice('chest')
+    ptbox2:AddChoice('pen')
+    ptbox2:AddChoice('hips')
+    ptbox2:AddChoice('lefthand')
+    ptbox2:AddChoice('righthand')
+
+    function ptbox2:OnSelect( _, LookupAttachment )
+        ss.aimpos = LookupAttachment
+    end
+    function ptbox2:Paint()
+        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
+    end]]
 
 
-    
-    
+
+
     --doMenuModel(MyDerma:GetX()+4JUdGzvrMFDWrUUwY3toJATSeNwjn54LkCnKBPRzDuhzi5vSepHfUckJNxRL2gjkNrSqtCoRUrEDAgRwsQvVCjZbRyFTLRNyDmT1a1boZVred, MyDerma)
 
     local icon = vgui.Create( "DModelPanel", menuderma )
@@ -548,6 +636,7 @@ function SUGUI()
     DLabel:SetText( "Aimbot key:" )
 
 
+
     -----------------------------------
 
 
@@ -564,195 +653,15 @@ function SUGUI()
         LocalPlayer():ChatPrint("Aimbot bound to: "..input.GetKeyName( num )) ss.aimkey = num
     end
 
-    
+
 end
 
 concommand.Add('ss_menu', SUGUI)
 
 
---[[ --old menu
-local MyDerma
-function ui()
-    MyDerma = vgui.Create( "DFrame" )
-    MyDerma:SetSize( 750, 450 )
-    MyDerma:SetPos( midW - ( MyDerma:GetWide() / 2 ), midH - ( MyDerma:GetTall() / 2) )
-    MyDerma:SetTitle( " " )
-    MyDerma:MakePopup()
-    MyDerma:InvalidateParent(true)
-    MyDerma:SetDeleteOnClose( false )
-    MyDerma:ShowCloseButton(false)
-    MyDerma.Paint = function(s , w , h)
-        draw.RoundedBox(5,5,0,w , h,Color(40,40,40, 250))
-        draw.RoundedBox( 0, 325, 15, 230, 320, Color(25,25,25, 170) )
-    end
 
-    local cbutton = vgui.Create('DButton', MyDerma)
-    cbutton:SetText('X')
-    cbutton:SetTextColor(colors.black)
-    cbutton:SetSize(16, 16)
-    cbutton:SetPos(MyDerma:GetWide() - cbutton:GetWide() - 5, 5)
-    function cbutton:DoClick()
-        MyDerma:Close()
-    end
-    function cbutton:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.red)
-    end
-
-    local cbuttons = vgui.Create('DButton', MyDerma)
-    cbuttons:SetText('C')
-    cbuttons:SetTextColor(colors.black)
-    cbuttons:SetSize(16, 16)
-    cbuttons:SetPos(MyDerma:GetWide() - cbuttons:GetWide() - 5, 25)
-    function cbuttons:DoClick()
-        RunConsoleCommand('ss_cmenu')
-    end
-    function cbuttons:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.orange)
-    end
-
-
-    checkbox("Bhop", "Toggle Bhop", 'bhop', 10, 10, MyDerma )
-    checkbox("Grabber PK", "Toggle Grabber/prop prediction", 'grabber', 10, 50, MyDerma )
-    checkbox("Crosshair", "shootbox", 'crosshair', 10, 90, MyDerma )
-    checkbox("Hitbox ESP", "Player Hitbox", 'esp_hitboxes', 10, 130, MyDerma )
-    checkbox("Eye Tracer", "Trace enemy eyes", 'eyetrace', 10, 170, MyDerma )
-    checkbox("Skeleton ESP", "Draw bones on model", 'skelly', 10, 210, MyDerma )
-    checkbox("Hand Cham", "Toggle Hand Cham", 'hands', 100, 210, MyDerma )
-    checkbox("Esp Names", "Toggle Names", 'txtespPLAYER', 100, 10, MyDerma )
-    checkbox("Esp Chams", "Toggle Chams", 'chams', 100, 50, MyDerma )
-    checkbox("Prop Names", "Toggle Prop Names", 'txtespPROP', 100, 90, MyDerma )
-    checkbox("Prop Chams", "Toggle Prop Chams", 'pchams', 100, 130, MyDerma )
-    checkbox("3d Box ESP", "Toggle Box Esp", 'box', 100, 170, MyDerma )
-
-    checkbox("Perspective", "its like view", 'tps', 575, 90, MyDerma )
-    checkbox("Head ESP", "its like circle", 'circlehead', 575, 130, MyDerma )
-    checkbox("Menu Animate", "its like dance", 'gdance', 575, 170, MyDerma )
-    checkbox("Fill 3D Box ESP", "Fill 3D Box ESP", 'fillbox', 575, 210, MyDerma )
-
-    checkbox("Player Walls", "its like view", 'wallsx', 200, 90, MyDerma )
-    checkbox("Prop Walls", "its like view", 'wallsxp', 200, 130, MyDerma )
-
-    checkbox("Info", "its like debig", 'getgood', 575, 10, MyDerma )
-    checkbox("Watermark", "its like mark", 'watermark', 575, 50, MyDerma )
-
-    checkbox("Cham Light", "Toggle PNames", 'chams_lighting', 200, 10, MyDerma )
-    checkbox("Prop Cham Light", "Toggle PNames", 'pchams_lighting', 200, 50, MyDerma )
-    checkbox("Legit Aimlock", "Toggle aimlock", 'toggle', 200, 170, MyDerma )
-
-    slider( "FOV", "fov", 1, 170, 10, 300, 250, 20, MyDerma)
-    slider( "Chams Alpha", "chams_a", 1, 255, 10, 350, 250, 20, MyDerma)
-    slider( "PChams Alpha", "pchams_a", 1, 255, 10, 400, 250, 20, MyDerma)
-    
-    slider('Tp Yaw', 'tps_y', 0, 360, 300, 350, 250, 20, MyDerma)
-    slider('Tp Height', 'tps_h', 0, 100, 300, 400, 250, 20, MyDerma)
-
-
-    
-    
-    --doMenuModel(MyDerma:GetX()+4JUdGzvrMFDWrUUwY3toJATSeNwjn54LkCnKBPRzDuhzi5vSepHfUckJNxRL2gjkNrSqtCoRUrEDAgRwsQvVCjZbRyFTLRNyDmT1a1boZVred, MyDerma)
-
-    local icon = vgui.Create( "DModelPanel", MyDerma )
-    icon:SetSize( 225, 225 )
-    icon:SetPos(330, 110)
-    icon:SetModel( "models/player/gman_high.mdl" )
-    function icon:LayoutEntity( ent )
-        if ss.gdance then
-            ent:SetSequence( ent:LookupSequence( "taunt_dance" ) )
-            if( ent:GetCycle() > 0.97 ) then ent:SetCycle( 0.02 ) end
-            icon:RunAnimation()
-        end
-    end
-    function icon.Entity:GetPlayerColor() return Vector(ss.hchams_col.r / 255, ss.hchams_col.g / 255, ss.hchams_col.b / 255) end
-
-    local DLabel = vgui.Create( "DLabel", MyDerma )
-    DLabel:SetPos( 200, 210 )
-    DLabel:SetSize( 100, 10)
-    DLabel:SetColor(colors.white)
-    DLabel:SetFont('Specialneeds2')
-    DLabel:SetText( "Aimbot key:" )
-
-    local DLabel2 = vgui.Create( "DLabel", MyDerma )
-    DLabel2:SetPos( 330, 20 )
-    DLabel2:SetSize( 230, 20)
-    DLabel2:SetColor(colors.white)
-    DLabel2:SetFont('Specialneeds2')
-    DLabel2:SetText("Name:"..LocalPlayer():Name())
-
-    local DLabel3 = vgui.Create( "DLabel", MyDerma )
-    DLabel3:SetPos( 330, 35 )
-    DLabel3:SetSize( 230, 20)
-    DLabel3:SetColor(colors.white)
-    DLabel3:SetFont('Specialneeds2')
-    DLabel3:SetText("SteamID:"..LocalPlayer():SteamID())
-
-    local DLabel31 = vgui.Create( "DLabel", MyDerma )
-    DLabel31:SetPos( 330, 50 )
-    DLabel31:SetSize( 230, 20)
-    DLabel31:SetColor(colors.white)
-    DLabel31:SetFont('Specialneeds2')
-    DLabel31:SetText("SteamID64:"..LocalPlayer():SteamID64())
-
-    local DLabel32 = vgui.Create( "DLabel", MyDerma )
-    DLabel32:SetPos( 330, 65 )
-    DLabel32:SetSize( 230, 20)
-    DLabel32:SetColor(colors.white)
-    DLabel32:SetFont('Specialneeds2')
-    DLabel32:SetText("Team:"..team.GetName( LocalPlayer():Team() ))
-
-    local DLabel321 = vgui.Create( "DLabel", MyDerma )
-    DLabel321:SetPos( 330, 80 )
-    DLabel321:SetSize( 230, 20)
-    DLabel321:SetColor(colors.white)
-    DLabel321:SetFont('Specialneeds2')
-    DLabel321:SetText("GUIFrameTime:"..VGUIFrameTime())
-
-    local DLabel323 = vgui.Create( "DLabel", MyDerma )
-    DLabel323:SetPos( 330, 95 )
-    DLabel323:SetSize( 230, 20)
-    DLabel323:SetColor(colors.white)
-    DLabel323:SetFont('Specialneeds2')
-    DLabel323:SetText("FrameNumber:"..FrameNumber())
-    
-    local DLabel324 = vgui.Create( "DLabel", MyDerma )
-    DLabel324:SetPos( 330, 110 )
-    DLabel324:SetSize( 230, 20)
-    DLabel324:SetColor(colors.white)
-    DLabel324:SetFont('Specialneeds2')
-    DLabel324:SetText("FrameTime:"..RealFrameTime())
-
-    local DLabel324 = vgui.Create( "DLabel", MyDerma )
-    DLabel324:SetPos( 330, 125 )
-    DLabel324:SetSize( 230, 20)
-    DLabel324:SetColor(colors.white)
-    DLabel324:SetFont('Specialneeds2')
-    DLabel324:SetText("SrvrPing:"..LocalPlayer():Ping())
-
-    -----------------------------------
-
-
-    local binder = vgui.Create( "DBinder", MyDerma )
-    binder:SetSize( 40, 15 )
-    binder:SetPos( 260, 210 )
-    binder:SetText('key')
-    function binder:Paint()
-        DrawRect(self, colors.darkgrey, colors.white, self:GetWide(), self:GetTall())
-    end
-
-
-    function binder:OnChange( num )
-        LocalPlayer():ChatPrint("Aimbot bound to: "..input.GetKeyName( num )) ss.aimkey = num
-    end
-
-    
-end
-
-concommand.Add('ss_menu', ui)
-
-]]
-
-local ColorDerma
+local ColorDerma = vgui.Create( "DFrame" )
 function cui()
-    ColorDerma = vgui.Create( "DFrame" )
     ColorDerma:SetSize( 400, 550 )
     ColorDerma:SetPos( midW - ( ColorDerma:GetWide() / 2 - 650 ), midH - ( ColorDerma:GetTall() / 2) )
     ColorDerma:SetTitle( " " )
@@ -828,22 +737,102 @@ function cui()
     DLabelx322412:SetColor(colors.white)
     DLabelx322412:SetFont('Specialneeds2')
     DLabelx322412:SetText("Menu")
-    
 
-    
+
+
 end
 
 concommand.Add('ss_cmenu', cui)
 
 makeHook("OnContextMenuOpen", function()
-    cui()
+    if not ColorDerma:IsVisible() then
+        ColorDerma:Show()
+    else
+        cui()
+    end
 end)
 
 makeHook("OnContextMenuClose", function()
-    if ColorDerma:IsVisible() then ColorDerma:Close() end
+    if ColorDerma:IsVisible() then ColorDerma:Hide() end
 end)
 
 
+--[[
+local f = vgui.Create( "DFrame" )
+function fui()
+    f:SetSize( 350, 75 )
+    f:SetPos( midW - ( f:GetWide() / 2 - 0 ), midH - ( f:GetTall() / 2) )
+    f:SetTitle( " " )
+    f:MakePopup()
+    f:InvalidateParent(true)
+    f:SetDeleteOnClose( false )
+    f:ShowCloseButton(false)
+    f.Paint = function(s , w , h)
+        draw.RoundedBox(5,5,0,w , h,Color(40,40,40, 250))
+    end
+    local cbutton = vgui.Create('DButton', f)
+    cbutton:SetText('X')
+    cbutton:SetTextColor(colors.black)
+    cbutton:SetSize(16, 16)
+    cbutton:SetPos(f:GetWide() - cbutton:GetWide() - 5, 5)
+    function cbutton:DoClick()
+        f:Close()
+    end
+    function cbutton:Paint()
+        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.red)
+    end
+
+    local friends = vgui.Create( 'DComboBox', f )
+    friends:SetPos( 150, 20 )
+    friends:SetSize( 115, 20 )
+    friends:SetValue( 'Friend 2' )
+    makeHook('Think' function()
+        for k, v in ipairs(player.GetAll()) do
+            friends:AddChoice(v:Nick())
+        end
+    end)
+
+
+    function friends:OnSelect( _, val )
+        ss.friends1 = v:Nick()
+    end
+    function friends:Paint()
+        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
+    end
+
+    local friendss = vgui.Create( 'DComboBox', f )
+    friendss:SetPos( 20, 20 )
+    friendss:SetSize( 115, 20 )
+    friendss:SetValue( 'Friend 1' )
+    makeHook('Think' function()
+        for k, v in ipairs(player.GetAll()) do
+            friends:AddChoice(v:Nick())
+        end
+    end)
+
+
+    function friendss:OnSelect( _, val )
+        ss.friends2 = v:Nick()
+    end
+    function friendss:Paint()
+        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
+    end
+end
+
+concommand.Add('ss_fmenu', fui)
+
+makeHook("OnContextMenuOpen", function()
+    if not f:IsVisible() then
+        f:Show()
+    else
+        fui()
+    end
+end)
+
+makeHook("OnContextMenuClose", function()
+    if f:IsVisible() then f:Hide() end
+end)
+]]
 --[[-------------------------------------------------------------------------
     Move Stuff
 ---------------------------------------------------------------------------]]
@@ -858,7 +847,6 @@ end
 hook.Add("CreateMove", "CMoveStuff", function(cmd)
     if ss.bhop then bhop(cmd) end
 end)
-
 ------
 
 
@@ -867,10 +855,12 @@ end)
     Esp Stuff
 ---------------------------------------------------------------------------]]
 
+
+
 local function closestEntByClass(class)
     local pltbl = {}
     for _, v in pairs(ents.FindByClass(class)) do
-        if v == LocalPlayer() or not v:IsValid() then continue end 
+        if v == LocalPlayer() or not v:IsValid() then continue end
         pltbl[#pltbl+1] = v
     end
     local pos = LocalPlayer():GetPos()
@@ -892,34 +882,27 @@ local function getTextSize(font,str)
     return surface.GetTextSize(str)
 end
 
-function tespPlayer(v)
-    local text = ''
-    local pos = v:EyePos(v:OBBCenter()):ToScreen()
-    local n = v:Nick()
-    local w,h = getTextSize('Specialneeds',n)
-    DrawText(Color(255,255,255), pos.x-w/2, pos.y-h/2-20,n, 'Specialneeds')
-end
+
+
+
 
 function tespProp(v)
     local text = ''
     local pos = v:LocalToWorld(v:OBBCenter()):ToScreen()
 
-    local str = string.Explode('/', v:GetModel()) 
+    local str = string.Explode('/', v:GetModel())
     local nn = str[#str]
 
     local w,h = getTextSize('Specialneeds',nn)
     DrawText(Color(255,255,255), pos.x-w/2, pos.y-h/2,nn, 'Specialneeds')
 end
 
-hook.Add("HUDPaint", "EspHax", function()
-    local playerTarget = closestEntByClass("player")
-    for k, v in pairs(playerTarget) do
-        if v:Alive() and v:Team() ~= TEAM_SPECTATOR and ss.txtespPLAYER then tespPlayer(v) end
-    end
+makeHook("SHUDPaint", function()
+
 
     local propTarget = closestEntByClass("prop_physics")
-    for k, v in pairs(propTarget) do 
-        if ss.txtespPROP then tespProp(v) end 
+    for k, v in pairs(propTarget) do
+        if ss.txtespPROP then tespProp(v) end
     end
 end)
 
@@ -929,7 +912,7 @@ end)
     Fov Stuff
 ---------------------------------------------------------------------------]]
 
-hook.Add("CalcView", "asdsagsaadhdhsehs", function( p, o, a, f )
+makeHook("CalcView", function( p, o, a, f )
     local view = {}
     local fov = ss.fov - ( GetConVar ("fov_desired"):GetFloat() - f )
     view.fov = fov
@@ -943,7 +926,7 @@ end)
 
 
 surface.CreateFont( "Propsenseamon", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 20,
     weight = 200,
@@ -961,7 +944,7 @@ surface.CreateFont( "Propsenseamon", {
 } )
 
 surface.CreateFont( "boosls", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 14,
     weight = 200,
@@ -979,7 +962,7 @@ surface.CreateFont( "boosls", {
 } )
 
 surface.CreateFont( "booslssd", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 16,
     weight = 200,
@@ -997,7 +980,7 @@ surface.CreateFont( "booslssd", {
 } )
 
 surface.CreateFont( "Propsenseamon2", {
-    font = "Arial", 
+    font = "Arial",
     extended = false,
     size = 20,
     weight = 400,
@@ -1014,119 +997,116 @@ surface.CreateFont( "Propsenseamon2", {
     outline = false,
 } )
 
-hook.Add("HUDPaint" , "DrawMyHud" , function()
-
-    hook.Add( "HUDPaint", "HUDPaint_DrawABox", function()
+local function watermark()
         if ss.watermark then
             draw.RoundedBox(0,1746,6,155+8 , 25 + 8,Color(90,90,90))
             draw.RoundedBox(0,1750,10,155,25,Color(25,25,25))
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos( 1760, 12 ) 
-            surface.SetFont( "Propsenseamon" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos( 1760, 12 )
+            surface.SetFont( "Propsenseamon" )
             surface.DrawText( "Sugoma.Solutions" )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos( 2, 2 ) 
-            surface.SetFont( "booslssd" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos( 2, 2 )
+            surface.SetFont( "booslssd" )
             surface.DrawText( "Logged in as:")
 
-            surface.SetTextColor( colors.newblue ) 
-            surface.SetTextPos( 80, 2 ) 
-            surface.SetFont( "booslssd" ) 
+            surface.SetTextColor( Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b) )
+            surface.SetTextPos( 80, 2 )
+            surface.SetFont( "booslssd" )
             surface.DrawText(LocalPlayer():Name())
 
-    
+
         end
 
-    end )
+    end
 
-    hook.Add( "HUDPaint", "becool", function()
+local function infoshow()
         if ss.getgood then
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,35) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,35)
+            surface.SetFont( "boosls" )
             surface.DrawText( "FrameTime:"..RealFrameTime() )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,50) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,50)
+            surface.SetFont( "boosls" )
             surface.DrawText( "FrameNumber:"..FrameNumber() )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,65) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,65)
+            surface.SetFont( "boosls" )
             surface.DrawText( "GUIFrameTime:"..VGUIFrameTime() )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,80) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,80)
+            surface.SetFont( "boosls" )
             surface.DrawText( "SrvrPing:"..LocalPlayer():Ping() )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,95) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,95)
+            surface.SetFont( "boosls" )
             surface.DrawText( "Team:"..team.GetName( LocalPlayer():Team() ) )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,110) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,110)
+            surface.SetFont( "boosls" )
             surface.DrawText( "SteamID64:"..LocalPlayer():SteamID64() )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,125) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,125)
+            surface.SetFont( "boosls" )
             surface.DrawText( "SteamID:"..LocalPlayer():SteamID() )
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos(5,140) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos(5,140)
+            surface.SetFont( "boosls" )
             surface.DrawText( "Name:"..LocalPlayer():Name() )
         end
-    end )
+    end
 
-    hook.Add( "HUDPaint", "becooler", function()
-        if ss.getgood and ss.toggle then
+local function legitaims()
+        if ss.getgood and ss.softaimbot then
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos( midW + 10, midH + 20) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos( midW + 10, midH + 20)
+            surface.SetFont( "boosls" )
             surface.DrawText( "LegitAim" )
 
         end
-    end )
+    end
 
-    hook.Add( "HUDPaint", "becoolerer", function()
+local function aimkeys()
         if ss.getgood then
 
-            surface.SetTextColor( 255, 255, 255 ) 
-            surface.SetTextPos( midW + 10, midH + 10) 
-            surface.SetFont( "boosls" ) 
+            surface.SetTextColor( 255, 255, 255 )
+            surface.SetTextPos( midW + 10, midH + 10)
+            surface.SetFont( "boosls" )
             surface.DrawText( "Aimbot key = "..input.GetKeyName( ss.aimkey ) )
 
         end
-    end )
+    end
 
-    hook.Add("HUDPaint", "DrawCross", function()
+local function drawcross()
         if ss.crosshair then
             draw.RoundedBox(0,midW - 1.25,midH - 15 ,2,30,Color(0,255,255,100))
             draw.RoundedBox(0,midW - 15 ,midH - 0.15,30,2,Color(0,255,255,100))
         end
-    end)
+    end
 
 
-
-    
-
-    
-
+makeHook("SHUDPaint" , function()
+    watermark()
+    drawcross()
+    infoshow()
+    aimkeys()
+    legitaims()
 end)
 
-
-
 --[[-------------------------------------------------------------------------
-    Aim 
+    Aim
     Stuff
 ---------------------------------------------------------------------------]]
 
@@ -1139,13 +1119,13 @@ end
 
 local function onScreen(ent)
     if lply:GetObserverMode() == 0 then
-        local Width = ent:BoundingRadius()
-        local Disp = ent:GetPos() -lply:GetShootPos()
-        local Dist = Disp:Length()
-        local MaxCos = math.abs( math.cos( math.acos( Dist /math.sqrt( Dist *Dist +Width *Width ) ) +56 *( math.pi /180 ) ) )
-        Disp:Normalize()
-        local dot = Disp:Dot( lply:EyeAngles():Forward() )
-        return dot > MaxCos
+            local Width = ent:BoundingRadius()
+            local Disp = ent:GetPos() -lply:GetShootPos()
+            local Dist = Disp:Length()
+            local MaxCos = math.abs( math.cos( math.acos( Dist /math.sqrt( Dist *Dist +Width *Width ) ) +56 *( math.pi /180 ) ) )
+            Disp:Normalize()
+            local dot = Disp:Dot( lply:EyeAngles():Forward() )
+            return dot > MaxCos
     end
 end
 
@@ -1166,13 +1146,15 @@ local function doAim(v, cmd)
   	local solveAng = (v:GetAttachment(v:LookupAttachment("eyes")).Pos - lply:GetShootPos()):Angle()
     --if ss.bias > 0 then solveAng = LerpAngle(1-ss.bias/100, cmd:GetViewAngles(), solveAng) end
     --local solvePos = (v:GetAttachment(v:LookupAttachment("eyes")).Pos - lply:GetShootPos()):Angle()
-      print(v, solveAng)
+
 		cmd:SetViewAngles(solveAng)
-  
+
 end
 
-local function doFire(cmd) 
-	cmd:SetButtons(bit.bor(cmd:GetButtons(), IN_ATTACK))
+local function doFire(cmd)
+    if ss.fire then
+	    cmd:SetButtons(bit.bor(cmd:GetButtons(), IN_ATTACK))
+    end
 end
 
 hook.Add("CreateMove","", function(cmd)
@@ -1183,10 +1165,10 @@ hook.Add("CreateMove","", function(cmd)
     local players = closestEntByClass('player')
     for k, v in next, players do
         if v ~= lply and (v:IsValid() and onScreen(v) and v:Alive() and v:Team() ~= TEAM_SPECTATOR and team.GetName(v:Team()) != "Spectator" && v:GetObserverMode() == 0) then
-        	local Visible = { 
-          	start = lply:GetShootPos(), 
-        		endpos = v:GetAttachment(v:LookupAttachment("eyes")).Pos, 
-          	filter = {lply,v}, 
+        	local Visible = {
+          	start = lply:GetShootPos(),
+        		endpos = v:GetAttachment(v:LookupAttachment(ss.aimpos)).Pos,
+          	filter = {lply,v},
           	mask = MASK_SHOT
         	}
         	local tr = util.TraceLine(Visible)
@@ -1194,28 +1176,21 @@ hook.Add("CreateMove","", function(cmd)
 
         	  doAim(v, cmd)
             doFire(cmd) --if ss.triggerbot then doFire() end
-        	end	
+        	end
         end
     end
 end)
+------------------------------------
+
+
 
 
 --[[-------------------------------------------------------------------------
-    Skybox Stuff
+    esp  Stuff
 ---------------------------------------------------------------------------]]
 
-makeHook("PostDraw2DSkyBox", function()
-    render.Clear(25, 25, 25, 255)
-return true 
-end)
 
-makeHook("PostDrawSkyBox", function()
-    render.Clear(25, 25, 25, 255)
-return true 
-end)
-
-
-function chams(v)
+local function chams(v)
     v:SetColor(Color(0,0,0,0))
     cam.IgnoreZ(ss.wallsx)
         render.MaterialOverride(Material(ss.material))
@@ -1230,7 +1205,7 @@ function chams(v)
     v:SetColor(Color(255,255,255,255))
 end
 
-function pchams(v)
+local function pchams(v)
     v:SetColor(Color(0,0,0,0))
     cam.IgnoreZ(ss.wallsxp)
         render.MaterialOverride(Material("models/debug/debugwhite"))
@@ -1245,39 +1220,39 @@ function pchams(v)
     v:SetColor(Color(255,255,255,255))
 end
 
-function hitboxes(v)
-    for group = 0,v:GetHitBoxGroupCount()-1 do 
-        local count = v:GetHitBoxCount(group) - 1 
-        for hitbox = 0, count do 
-            local bone = v:GetHitBoxBone(hitbox,group) 
-            if not bone then continue end 
-            local min, max = v:GetHitBoxBounds(hitbox, group) 
-            local bonepos, boneang = v:GetBonePosition(bone) 
+
+local function hitboxes(v)
+    for group = 0,v:GetHitBoxGroupCount()-1 do
+        local count = v:GetHitBoxCount(group) - 1
+        for hitbox = 0, count do
+            local bone = v:GetHitBoxBone(hitbox,group)
+            if not bone then continue end
+            local min, max = v:GetHitBoxBounds(hitbox, group)
+            local bonepos, boneang = v:GetBonePosition(bone)
             local predpos = bonepos + (v:GetVelocity()*engine.TickInterval())*(lply:Ping()/1000 + GetConVar('cl_interp'):GetFloat())*2
             cam.Start3D()
                 render.DrawWireframeBox(predpos,boneang,min,max,Color(0, math.abs(math.sin(RealTime()*15)*255), 255) )
-            cam.End3D()    
-        end 
-    end 
+            cam.End3D()
+        end
+    end
 end
 
-ply = LocalPlayer()
-hook.Add('HUDPaint','Tracereye', function()
+
+makeHook('SHUDPaint', function()
     if ss.eyetrace then
-        for i,v in pairs(player.GetAll()) do
-        if v == ply then
-        else
-            surface.SetDrawColor( ss.hchams_col.r, ss.hchams_col.g, ss.hchams_col.b, 255, 175 )
-            pstart = v:GetBonePosition( v:LookupBone('ValveBiped.Bip01_Head1') ):ToScreen()
-            pend = util.TraceLine(util.GetPlayerTrace(v)).HitPos:ToScreen()
-            surface.DrawLine(pstart.x,pstart.y,pend.x,pend.y)
+        for i, v in pairs(player.GetAll()) do
+        	if v ~= lply then
+	            surface.SetDrawColor( ss.hchams_col.r, ss.hchams_col.g, ss.hchams_col.b, 255, 175 )
+	            pstart = v:GetBonePosition( v:LookupBone('ValveBiped.Bip01_Head1') ):ToScreen()
+	            pend = util.TraceLine(util.GetPlayerTrace(v)).HitPos:ToScreen()
+	            surface.DrawLine(pstart.x,pstart.y,pend.x,pend.y)
             end
         end
     end
 end)
 
 
-hook.Add("PreDrawViewModel", "PreViewModelChams", function()
+makeHook("PreDrawViewModel", function()
     if ss.hands then
             render.SuppressEngineLighting(true)
         if IsDrawingWireframe then
@@ -1292,7 +1267,7 @@ hook.Add("PreDrawViewModel", "PreViewModelChams", function()
     end
 end)
 
-hook.Add("PreDrawHalos", "", function()
+makeHook("PreDrawHalos", function()
     if ss.glow then
         for k,v in next, player.GetAll() do
             cam.IgnoreZ()
@@ -1308,7 +1283,7 @@ hook.Add("PreDrawHalos", "", function()
 end);
 
 ply = LocalPlayer()
-hook.Add('HUDPaint','SkeletonEsp', function()
+makeHook('SHUDPaint', function()
     if ss.skelly then
         for i,v in pairs(player.GetAll()) do
         if v == ply then
@@ -1343,55 +1318,94 @@ end)
 
 local ent = FindMetaTable("Entity")
 local vec = FindMetaTable("Vector")
- 
-hook.Add("HUDPaint", "test", function() 
+
+makeHook("SHUDPaint", function()
     if ss.boxesphealth then
         for k, v in next, player.GetAll() do
-    
+
             if(!v:Alive()) then continue end
             if(v:IsDormant()) then continue end
             if(v == LocalPlayer()) then continue end
-    
+
             local pos = ent.GetPos(v);
-            local poss = pos + Vector(0, 0, 70); 
-            local pos = vec.ToScreen(pos);         
+            local poss = pos + Vector(0, 0, 70);
+            local pos = vec.ToScreen(pos);
             local poss = vec.ToScreen(poss);
-            local h = pos.y - poss.y;         
-            local w = h / 2; 
-    
+            local h = pos.y - poss.y;
+            local w = h / 2;
+
             local health = math.Clamp(v:Health(), 0, 100)
-    
+
             surface.SetDrawColor(HSVToColor( health / 100 * 120, 1, 1 ));
             surface.DrawOutlinedRect(pos.x - w / 2, pos.y - h, w, h);
         end
     end
 end)
 
-hook.Add("HUDPaint", "ballsxcs", function() 
+makeHook("SHUDPaint", function()
     if ss.boxesps then
         for k, v in next, player.GetAll() do
-    
+
             if(!v:Alive()) then continue end
             if(v:IsDormant()) then continue end
             if(v == LocalPlayer()) then continue end
-    
+
             local pos = ent.GetPos(v);
-            local poss = pos + Vector(0, 0, 70); 
-            local pos = vec.ToScreen(pos);         
+            local poss = pos + Vector(0, 0, 70);
+            local pos = vec.ToScreen(pos);
             local poss = vec.ToScreen(poss);
-            local h = pos.y - poss.y;         
-            local w = h / 2; 
-    
+            local h = pos.y - poss.y;
+            local w = h / 2;
+
             local health = math.Clamp(v:Health(), 0, 100)
-    
+
             surface.SetDrawColor(Color(ss.box_col.r, ss.box_col.g, ss.box_col.b, 255));
             surface.DrawOutlinedRect(pos.x - w / 2, pos.y - h, w, h);
         end
     end
 end)
 
+makeHook("SHUDPaint", function()
+    if ss.txtespPLAYER then
+        for k, v in pairs(player.GetAll()) do
 
-hook.Add('HUDPaint','Esp', function()
+            if not v:Alive() then continue end
+            if v:IsDormant() then continue end
+            if v == LocalPlayer() then continue end
+            local offset = Vector(0,0,-70)
+            local pos = (v:EyePos() + offset):ToScreen()
+
+            draw.DrawText( v:Nick(), "DermaDefault", pos.x, pos.y, Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b, 255), TEXT_ALIGN_CENTER )
+        end
+    end
+end)
+--[[]
+hook.Add("HUDPaint", "ballsxcssss", function()
+    if ss.txtespPLAYER then
+        for k, v in pairs(player.GetAll()) do
+
+            if not v:Alive() then continue end
+            if v:IsDormant() then continue end
+            if v == LocalPlayer() then continue end
+            local hp = v:Health()
+            local offset = Vector(0, 0, 15)
+            local pos = (v:EyePos() + offset):ToScreen()
+            local health = math.Clamp(v:Health(), 0, 100)
+            local hpdraw = HSVToColor( health / 100 * 120, 1, 1 )
+
+            surface.SetFont( "DermaDefault" )
+            surface.SetTextColor( HSVToColor( health / 100 * 120, 1, 1 ) )
+            surface.SetTextPos( pos.x, pos.y )
+            surface.DrawText( hp )
+
+        end
+    end
+end)
+]]
+
+
+
+makeHook('SHUDPaint', function()
     if ss.circlehead then
         for i,v in pairs(player.GetAll()) do
         if v == ply then
@@ -1408,21 +1422,21 @@ hook.Add('HUDPaint','Esp', function()
         end
     end
 end)
-   
-hook.Add("PostDrawViewModel", "PostViewModelChams", function()
+
+makeHook("PostDrawViewModel", function()
    render.SetColorModulation(1, 1, 1)
    render.MaterialOverride(None)
    render.SetBlend(1)
    render.SuppressEngineLighting(false)
-   
+
    if IsDrawingWireframe then return end
-   
+
    IsDrawingWireframe = true
    LocalPlayer():GetViewModel():DrawModel()
    IsDrawingWireframe = false
 end)
 
-hook.Add('PreDrawEffects', ';kjbhsd;ouhadlkuhaefkuhaf', function()
+makeHook('PreDrawEffects', function()
     local playerTarget = closestEntByClass('player')
     for k, v in pairs(playerTarget)do
         if v:Alive() and v:Team() ~= TEAM_SPECTATOR and ss.chams then chams(v) end
@@ -1435,8 +1449,8 @@ end)
 
 makeHook('RenderScreenspaceEffects', function()
     players = closestEntByClass('player')
-    for k, v in next, players do 
-        if (isValid(v) and onScreen(v) and v:Alive() and v:Team() ~= TEAM_SPECTATOR and team.GetName(v:Team()) != "Spectator" && v:GetObserverMode() == 0) then 
+    for k, v in next, players do
+        if (isValid(v) and onScreen(v) and v:Alive() and v:Team() ~= TEAM_SPECTATOR and team.GetName(v:Team()) != "Spectator" && v:GetObserverMode() == 0) then
             if ss.esp_hitboxes and v ~= lply then hitboxes(v) end
         end
     end
@@ -1456,9 +1470,13 @@ local whitemat = CreateMaterial('? ' .. tostring(CurTime()), 'UnlitGeneric',{
 })
 
 
-hook.Add("HUDPaint", "balls", function()
+makeHook("SHUDPaint", function()
     if ss.box then
-        for k, v in pairs(player.GetAll()) do 
+        for k, v in pairs(player.GetAll()) do
+            if(!v:Alive()) then continue end
+            if(v:IsDormant()) then continue end
+            if(v == LocalPlayer()) then continue end
+
             if v == LocalPlayer() then continue end
             local mins, maxs = v:OBBMins(), v:OBBMaxs()
             local pos = v:GetPos()
@@ -1473,6 +1491,8 @@ hook.Add("HUDPaint", "balls", function()
                     end
                     render.DrawWireframeBox(pos, Angle(0, 0, 0), mins, maxs, Color(ss.box_col.r, ss.box_col.g, ss.box_col.b), false )
                 end
+                render.SetColorModulation(1, 1, 1)
+                render.SetMaterial(nil)
                 render.SuppressEngineLighting(false)
             cam.End3D()
         end
@@ -1480,45 +1500,21 @@ hook.Add("HUDPaint", "balls", function()
 end)
 
 ------------
-local function CheckObservers()
-  
-    if ss.speclist then return end
- 
-    observingPlayers = {}
-    observingPlayers.watcher = {}
-    observingPlayers.spec = {}
- 
-    for k, v in pairs(player.GetAll()) do
-        if v:IsValid() and v != LocalPlayer() then
-            local Trace = {}
-            Trace.start  = LocalPlayer():EyePos() + Vector(0, 0, 32)
-            Trace.endpos = v:EyePos() + Vector(0, 0, 32)
-            Trace.filter = {v, LocalPlayer()}
-            TraceRes = util.TraceLine(Trace)
-            if !TraceRes.Hit then
-                if (v:EyeAngles():Forward():Dot((LocalPlayer():EyePos() - v:EyePos())) > math.cos(math.rad(45))) then
-                    if !table.HasValue(observingPlayers.watcher, v) then table.insert(observingPlayers.watcher, v ) end
-                end
-            end
-        end
-        if v:GetObserverTarget() == LocalPlayer() then
-            if !table.HasValue(observingPlayers.spec, v) then table.insert(observingPlayers.spec, v) end
-        end
-    end
-end
 
 
 ---------------------
 
 gameevent.Listen("player_hurt")
 local function hitSound(data)
-	local ply = LocalPlayer()
-	if data.attacker == ply:UserID() then
-		surface.PlaySound("buttons/blip1.wav")
-	end
+    if ss.hitsound then
+        local ply = LocalPlayer()
+        if data.attacker == ply:UserID() then
+            surface.PlaySound("buttons/blip1.wav")
+        end
+    end
 end
- 
-hook.Add("player_hurt", "", hitSound)
+
+makeHook("player_hurt", hitSound)
 
 ----------------------------------------------
 
@@ -1564,10 +1560,10 @@ function closest_player(team)
 end
 
 local target = nil
-hook.Add("CreateMove", "PlayerFollow", function(cmd)
+makeHook("CreateMove", function(cmd)
 	if should_follow:GetInt() == 1 then
 		if is_movement_keys_down() then return end
-		
+
 		if follow_team:GetInt() == 0 then
 			target = closest_player()
 		elseif follow_team:GetInt() == 1 then
@@ -1575,18 +1571,19 @@ hook.Add("CreateMove", "PlayerFollow", function(cmd)
 		elseif follow_team:GetInt() == 2 then
 			target = closest_player(false)
 		end
-		
+
 		if not target then return end
 		moveToPos(cmd, target:GetPos())
 	end
 end)
 
-hook.Add("HUDPaint", "PlayerFollow_Draw", function()
+makeHook("SHUDPaint", function()
 	if should_follow:GetInt() == 1 and should_draw:GetInt() == 1 then
 		local pos = target:GetPos():ToScreen()
 		surface.DrawCircle( pos["x"], pos["y"], 7, 0, 255, 0)
 	end
 end)
+
 
 if ballz == 1 then
     RunConsoleCommand("follow", "1")
@@ -1613,42 +1610,6 @@ end)
 
 
 
-makeHook('CalcView', function(ent, pos, angles, fov)
-    if not lply:InVehicle() then
-        local sideoff = ss.tps_y
-        local heightoff = ss.tps_h
-        local offsetangle = Angle( 0, sideoff, 0 )
-        local origin
-
-        local view = {
-            origin = pos,
-            angles = angles,
-            fov = fov,
-        }
-
-        if ss.tps_collision then 
-            local endpos = pos - ((angles - offsetangle):Forward() * heightoff)
-            local tr = util.TraceHull({
-                start = pos,
-                endpos = endpos,
-                mask = MASK_SHOT,
-                filter = lply,
-                ignoreworld = false,
-                mins = Vector(-8, -8, -8),
-                maxs = Vector(8, 8, 8)
-            })
-            origin = tr.HitPos + tr.HitNormal
-        else
-            origin = pos - ((angles - offsetangle):Forward() * heightoff)
-        end
-
-        view.origin = origin
-        view.angles = angles
-        view.fov = ss.fov
-
-        return view
-    end
-end)
 
 
 makeHook('DrawPhysgunBeam', function(ply, _, enabled, target, _, hitPos)
@@ -1672,31 +1633,13 @@ end)
 -------------------------------------------------
 -----------------------------------------------------------
 ]]
- 
 
-concommand.Add("triggerbot",function()
-ss.toggle = not ss.toggle
-end)
 
-hook.Add("Think","aimbot", function()
-if ss.toggle then
-local ply = LocalPlayer() 
-    local trace = util.GetPlayerTrace( ply )
-    local traceRes = util.TraceLine( trace )
-    if traceRes.HitNonWorld then
-        local target = traceRes.Entity
-        if target:IsPlayer() then
-            local targethead = target:LookupBone("ValveBiped.Bip01_Head1")
-            local targetheadpos,targetheadang = target:GetBonePosition(targethead)
-            ply:SetEyeAngles((targetheadpos - ply:GetShootPos()):Angle())
-        end
-    end
-end
-end)
+
 
 makeHook('PreDrawEffects', function()
     if ss.grabber then
-        cam.Start3D2D(dbg.beampos,dbg.beamang+Angle(90,0,0),1) 
+        cam.Start3D2D(dbg.beampos,dbg.beamang+Angle(90,0,0),1)
                 surface.DrawCircle( 0, 0, 5 + math.cos( CurTime() ) * 50, colors.black )
                 surface.DrawCircle( 0, 0, 5 + math.sin( CurTime() ) * 50, colors.black )
         cam.End3D2D()
@@ -1748,77 +1691,593 @@ makeHook('PreDrawEffects', function()
             end
 
             local predpos = util.QuickTrace(cCenter, (final - cCenter) * 2, prop)
-            render.DrawLine(cCenter, veltrace.HitPos, Color(ss.hchams_col.r, ss.hchams_col.g , ss.hchams_col.b, 255), false) 
-            render.DrawLine(cCenter, predpos.HitPos, Color(ss.hchams_col.r, ss.hchams_col.g , ss.hchams_col.b, 255), false) 
+            render.DrawLine(cCenter, veltrace.HitPos, Color(ss.hchams_col.r, ss.hchams_col.g , ss.hchams_col.b, 255), false)
+            render.DrawLine(cCenter, predpos.HitPos, Color(ss.hchams_col.r, ss.hchams_col.g , ss.hchams_col.b, 255), false)
         cam.End3D()
     end
 end)
 
 -------------------
-if ss.speclist then
-    for k, v in ipairs(observingPlayers.watcher) do
-        if IsValid(v) then
-            surface.SetFont("Specialneeds")
-            local nameWidth, nameHeight = surface.GetTextSize("Observer: "..v:Name())
-            draw.SimpleText("Observer: "..v:Name(), "Specialneeds", ScrW() - nameWidth - 2, 0 + (15 * ( k - 1 ) ), Color(255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
-        end
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+local AKPL = (file.Read("akpl.dat") != nil && util.JSONToTable(util.Decompress(file.Read("akpl.dat"))) || {})
+
+// internal calculations
+local Col = {[-1]=Color(150,150,150,255), [0]=Color(255,0,0,255), [1]=Color(255,165,0,255), [2]=Color(0,255,0,255)}
+AKPL.LP = LocalPlayer()
+function AKPL.CalculateRenderPos(self)
+	local pos = self:GetPos() pos:Add(self:GetForward() * self:OBBMaxs().x) pos:Add(self:GetRight() * self:OBBMaxs().y) pos:Add(self:GetUp() * self:OBBMaxs().z) pos:Add(self:GetForward() * 0.15) return pos
+end
+function AKPL.CalculateRenderAng(self)
+	local ang = self:GetAngles() ang:RotateAroundAxis(ang:Right(), -90) ang:RotateAroundAxis(ang:Up(), 90) return ang
+end
+function AKPL.CalculateKeypadCursorPos(ply, ent)
+	if !ply:IsValid() then return end local tr = util.TraceLine( { start = ply:EyePos(), endpos = ply:EyePos() + ply:GetAimVector() * 65, filter = ply } ) if !tr.Entity or tr.Entity ~= ent then return 0, 0 end local scale = ent.Scale || 0.02 if !scale then return 0, 0 end local pos, ang = AKPL.CalculateRenderPos(ent), AKPL.CalculateRenderAng(ent) if !pos or !ang then return 0, 0 end local normal = ent:GetForward() local intersection = util.IntersectRayWithPlane(ply:EyePos(), ply:GetAimVector(), pos, normal) if !intersection then return 0, 0 end local diff = pos - intersection local x = diff:Dot( -ang:Forward() ) / scale local y = diff:Dot( -ang:Right() ) / scale return x, y
+end
+local elements = {{x = 0.075, y = 0.04, w = 0.85, h = 0.25,},{x = 0.075, y = 0.04 + 0.25 + 0.03, w = 0.85 / 2 - 0.04 / 2 + 0.05, h = 0.125, text = "ABORT",},{x = 0.5 + 0.04 / 2 + 0.05, y = 0.04 + 0.25 + 0.03, w = 0.85 / 2 - 0.04 / 2 - 0.05, h = 0.125, text = "OK",}} do for i = 1, 9 do local column = (i - 1) % 3 local row = math.floor((i - 1) / 3) local element = {x = 0.075 + (0.3 * column), y = 0.175 + 0.25 + 0.05 + ((0.5 / 3) * row), w = 0.25, h = 0.13, text = tostring(i), } elements[#elements + 1] = element end end
+function AKPL.GetHoveredElement(ply, ent)
+	local scale = ent.Scale || 0.02 local w, h = (ent:OBBMaxs().y - ent:OBBMins().y) / scale , (ent:OBBMaxs().z - ent:OBBMins().z) / scale local x, y = AKPL.CalculateKeypadCursorPos(ply, ent) for _, element in ipairs(elements) do local element_x = w * element.x local element_y = h * element.y local element_w = w * element.w local element_h = h * element.h if  element_x < x and element_x + element_w > x and element_y < y and element_y + element_h > y then return element end end
+end
+// internal calculations
+
+AKPL.KeypadCache = {}
+AKPL.KeypadOwners = AKPL.KeypadOwners || {}
+AKPL.AwaitingResponse = {}
+AKPL.ShouldUnlockKeypad = {}
+
+AKPL.InsertKey = function(i, p, v)
+    if(!tonumber(i) || !tonumber(p) || !tonumber(v)) then return i end
+    local val = i:ToTable()
+    val[p] = v
+    return table.concat(val)
+end
+
+AKPL.ResetLog = function(ent, validated)
+    if(!validated) then
+        AKPL.KeypadCache[ent]["Code"] = "0000"
     end
-    for k, v in ipairs(observingPlayers.spec) do
-        if IsValid(v) then
-             surface.SetFont("Specialneeds")
-            local nameWidth, nameHeight = surface.GetTextSize("Spectator: "..v:Name())
-            draw.SimpleText("Spectator: "..v:Name(), "Specialneeds", ScrW() - nameWidth - 2, -15 + (15 * #observingPlayers.watcher) + (15 * k - 1), Color(255, 0, 0), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+    AKPL.KeypadCache[ent]["Validated"] = validated && 2 || -1
+    AKPL.AwaitingResponse[ent] = nil
+    AKPL.ShouldUnlockKeypad[ent] = nil
+end
+
+AKPL.ValidCode = function(code)
+    return (tonumber(code) != 0 && code:StartWith(code:Replace("0", "")))
+end
+
+AKPL.ValidateCode = function(ent, status)
+    if(status == ent.Status_Granted) then
+        local code = AKPL.KeypadCache[ent]["Code"]
+        if (AKPL.ValidCode(code)) then
+            AKPL.KeypadCache[ent]["Validated"] = 1
+            if(AKPL.AwaitingResponse[ent]) then
+                AKPL.AwaitingResponse[ent][1] = -1
+            end
+        end
+    elseif(status == ent.Status_Denied) then
+        if(AKPL.KeypadCache[ent]["Validated"] <= 0 || (AKPL.KeypadCache[ent]["Validated"] == 1 && AKPL.AwaitingResponse[ent] && AKPL.AwaitingResponse[ent][3] == 3)) then
+            AKPL.ResetLog(ent)
         end
     end
 end
 
-AddHook("RenderScreenspaceEffects", RandomString(), function()
-    if !ss then
-        if ss.nightmode then
-            local nightmode = {
-                [ "$pp_colour_addr" ] = 55 * (1 / 255),
-                [ "$pp_colour_addg" ] = 45 * (1 / 255),
-                [ "$pp_colour_addb" ] = 66 * (1 / 255),
-                [ "$pp_colour_brightness" ] = -0.2,
-                [ "$pp_colour_contrast" ] = 1,
-                [ "$pp_colour_colour" ] = 1,
-                [ "$pp_colour_mulr" ] = 0,
-                [ "$pp_colour_mulg" ] = 0,
-                [ "$pp_colour_mulb" ] = 0
-            }
-            DrawColorModify( nightmode )
+AKPL.Logger = function(ent, name, old, new)
+    local Handler = {
+        ["Text"] = function(ent, old, new)
+            if(AKPL.AwaitingResponse[ent]) then
+                if(AKPL.AwaitingResponse[ent][3] == 1) then
+                    if((new:len() - old:len()) == AKPL.AwaitingResponse[ent][1]) then
+                        if(!AKPL.AwaitingResponse[ent][2]) then
+                            AKPL.AwaitingResponse[ent][3] = 3
+                        else
+                            AKPL.AwaitingResponse[ent][3] = 2
+                        end
+                    else
+                        AKPL.AwaitingResponse[ent] = nil
+                    end
+                elseif(AKPL.AwaitingResponse[ent][3] == 2) then
+                    if((new:len() - old:len()) == tostring(AKPL.AwaitingResponse[ent][2]):len()) then
+                        AKPL.AwaitingResponse[ent][3] = 3
+                    else
+                        AKPL.AwaitingResponse[ent] = nil
+                    end
+                end
+            return end
+            if(new == "" && AKPL.KeypadCache[ent]["Validated"] <= 0) && AKPL.ValidCode(AKPL.KeypadCache[ent]["Code"]) then return AKPL.ResetLog(ent) end
+            if(!ent:GetSecure()) then
+                for k, v in ipairs(string.ToTable(new)) do
+                    AKPL.KeypadCache[ent]["Code"] = AKPL.InsertKey(AKPL.KeypadCache[ent]["Code"], k, v)
+                end
+            else
+                for k, v in ipairs(ents.FindInSphere(ent:GetPos(), 120)) do
+                    if(!v:IsPlayer()) then continue end
+                    local element = AKPL.GetHoveredElement(v, ent)
+                    if(element) then
+                        if(tonumber(element.text)) then
+                            AKPL.KeypadCache[ent]["Code"] = AKPL.InsertKey(AKPL.KeypadCache[ent]["Code"], new:len(), tonumber(element.text))
+                        end
+                    else
+                        continue
+                    end
+                end
+            end
+            if(AKPL.KeypadCache[ent]["Validated"] != -1 && AKPL.GetEntOwner(ent)) then
+                AKPL.KeypadOwners[AKPL.GetEntOwner(ent)][AKPL.RenderText(AKPL.KeypadCache[ent]["Code"])] = AKPL.KeypadCache[ent]["Validated"]
+            end
+        end,
+        ["Status"] = function(ent, old, new)
+            AKPL.ValidateCode(ent, tonumber(new))
+        end,
+    }
+    if(Handler[name]) then
+        Handler[name](ent, old, new)
+    end
+end
+
+AKPL.GetPlayerByName = function(name)
+    if(!name || name == "") then return false end
+	name = string.lower(name)
+	for _,v in ipairs(player.GetHumans()) do
+		if(string.find(string.lower(v:Name()),name,1,true) != nil)
+			then return v
+		end
+    end
+    return false
+end
+
+AKPL.GetEntOwner = function(ent)
+    local ply = AKPL.GetPlayerByName(ent:GetNWString("FounderName"))
+    return ply && ply:AccountID() || ply
+end
+
+AKPL.RegisterCallback = function(ent)
+    if(!AKPL.KeypadCache[ent] && isfunction(ent.GetStatus) && isfunction(ent.GetText)) then
+        ent:NetworkVarNotify("Text", AKPL.Logger)
+        ent:NetworkVarNotify("Status", AKPL.Logger)
+        AKPL.KeypadCache[ent] = {["Code"]="0000", ["Validated"]=-1}
+        local sid = AKPL.GetEntOwner(ent)
+        if(sid == false) then return end
+        if(!AKPL.KeypadOwners[sid]) then
+            AKPL.KeypadOwners[sid] = {}
+        end
+        AKPL.KeypadOwners[sid][#AKPL.KeypadOwners[sid]+1] = ent
+    end
+end
+
+AKPL.SendCommand = function(ent, c, d)
+    if(ent:GetStatus() != ent.Status_None || AKPL.LP:EyePos():Distance(ent:GetPos()) >= 120 || util.NetworkStringToID(ent:GetClass()) == 0) then return end
+    net.Start(ent:GetClass())
+    net.WriteEntity(ent)
+    net.WriteUInt(c, 4)
+    if(tonumber(d)) then
+        net.WriteUInt(tonumber(d), 8)
+    end
+    net.SendToServer()
+end
+
+AKPL.TestCodes = function(ent)
+    if(AKPL.AwaitingResponse[ent] && AKPL.AwaitingResponse[ent][3] != 1) then
+        if(AKPL.AwaitingResponse[ent][1] == -1) then
+            AKPL.ResetLog(ent, true)
+        elseif(AKPL.AwaitingResponse[ent][3] == 2) then
+            AKPL.SendCommand(ent, 0, AKPL.AwaitingResponse[ent][2])
+        elseif(AKPL.AwaitingResponse[ent][3] == 3) then
+            AKPL.SendCommand(ent, 1)
+        end
+    else
+        if(AKPL.KeypadCache[ent]["Validated"] == 2) then
+            AKPL.ShouldUnlockKeypad[ent] = true
+        end
+        if(AKPL.KeypadCache[ent]["Validated"] != 1 && !AKPL.ShouldUnlockKeypad[ent]) then return end
+        if(ent:GetText() != "") then
+            return AKPL.SendCommand(ent, 2)
+        end
+        local code = AKPL.KeypadCache[ent]["Code"]:Replace("0",""):ToTable()
+        local split = tonumber(table.concat({code[1], code[2], code[3]}))
+        if(!split) then return end
+        if(split < 2^8) then
+            AKPL.AwaitingResponse[ent] = {3, code[4], 1}
+        else
+            split = tonumber(table.concat({code[1], code[2]}))
+            AKPL.AwaitingResponse[ent] = {2, tonumber(table.concat({code[3], code[4]})), 1}
+        end
+        AKPL.SendCommand(ent, 0, split)
+    end
+end
+
+makeHook("Tick", function()
+    file.Write("akpl.dat", util.Compress(util.TableToJSON(AKPL)))
+    for k, v in ipairs(ents.FindByClass("keypad*")) do
+        AKPL.RegisterCallback(v)
+        --AKPL.TestCodes(v) --this only works if the first 3 digits of a keypad code are under 255, TODO account for keypad cooldowns
+    end
+end)
+
+AKPL.RenderText = function(str)
+    if(tonumber(str) == 0) then return "Unknown" elseif(AKPL.ValidCode(str)) then return str:Replace("0", "") else return str:Replace("0", "*") end
+end
+AKPL.Gradient = Material( "gui/gradient" )
+
+makeHook("SHUDPaint", function()
+    if ss.keypads then
+
+        local tr = AKPL.LP:GetEyeTrace().Entity
+        if IsValid(tr) and AKPL.KeypadCache[tr] then
+            local text = AKPL.RenderText(AKPL.KeypadCache[tr]["Code"])
+            local color = Col[AKPL.KeypadCache[tr]["Validated"]]
+            surface.SetDrawColor( Color(0,0,50,255) )
+            surface.SetMaterial( AKPL.Gradient )
+            surface.DrawTexturedRect( ScrW() / 2 + 57, ScrH() / 2 - 7, 50, 15 )
+        end
+
+        for k, v in pairs(AKPL.KeypadCache) do
+            if(IsValid(k) && k != tr) then
+                local pos = k:GetPos():ToScreen()
+                if(pos.visible) then
+                    local text = AKPL.RenderText(v["Code"])
+                    local color = Col[v["Validated"]]
+                    surface.SetDrawColor( Color(0,0,50,255) )
+                    surface.SetMaterial( AKPL.Gradient )
+                    surface.DrawTexturedRect( pos.x, pos.y, 50, 15 )
+                    draw.SimpleText( text, "DermaDefault", pos.x + 5, pos.y + 6, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+                end
+            end
         end
     end
 end)
 
-local LightingModeChanged = false
-AddHook("PreRender", RandomString(), function()
-	if !ss then
-		if ss.fullbright then
-			render.SetLightingMode( 1 )
-			LightingModeChanged = true
-		end
-	end
+
+makeHook( "CalcView", function( ply, pos, angles, fov )
+	if ss.tps then
+        local view = {
+            origin = pos - ( angles:Forward() * 100 ),
+            angles = angles,
+            fov = fov,
+            drawviewer = true
+        }
+
+        return view
+    end
 end )
- 
-local function EndOfLightingMod()
-	if LightingModeChanged then
-		render.SetLightingMode( 0 )
-		LightingModeChanged = false
-	end
+
+hook.Add("SetupWorldFog", "nightmode", function()
+	if ss.nightmode then
+        render.FogMode( 1 )
+        render.FogColor( 0, 0, 0 )
+        render.FogStart(0)
+        render.FogEnd(0 * 100)
+        render.FogMaxDensity( 0.9 )
+        return true
+    end
+end)
+hook.Add("SetupSkyboxFog", "nightmode", function()
+    if ss.nightmode then
+        render.FogMode( 1 )
+        render.FogColor( 0, 0, 0 )
+        render.FogStart(0)
+        render.FogEnd(0 * 7)
+        render.FogMaxDensity( 0.9 )
+        return true
+    end
+end)
+local function DEG2RAD(x) return x * math.pi / 180 end
+local function RAD2DEG(x) return x * 180 / math.pi end
+
+local rainbow = 0.00
+local rotationdegree = 0.000;
+
+local function hsv2rgb(h, s, v, a)
+    local r, g, b
+
+    local i = math.floor(h * 6);
+    local f = h * 6 - i;
+    local p = v * (1 - s);
+    local q = v * (1 - f * s);
+    local t = v * (1 - (1 - f) * s);
+
+    i = i % 6
+
+    if i == 0 then r, g, b = v, t, p
+    elseif i == 1 then r, g, b = q, v, p
+    elseif i == 2 then r, g, b = p, v, t
+    elseif i == 3 then r, g, b = p, q, v
+    elseif i == 4 then r, g, b = t, p, v
+    elseif i == 5 then r, g, b = v, p, q
+    end
+
+    return r * 255, g * 255, b * 255, a * 255
 end
-AddHook("PostRender", RandomString(), EndOfLightingMod)
-AddHook("PreDrawHUD", RandomString(), EndOfLightingMod)
+
+local function draw_svaston(x, y, size)
+    local frametime = FrameTime()
+    local a = size / 60
+    local gamma = math.atan(a / a)
+    rainbow = rainbow + (frametime * 0.5)
+    if rainbow > 1.0 then rainbow = 0.0 end
+    if rotationdegree > 89 then rotationdegree = 0 end
+
+    for i = 0, 4 do
+        local p_0 = (a * math.sin(DEG2RAD(rotationdegree + (i * 90))))
+        local p_1 = (a * math.cos(DEG2RAD(rotationdegree + (i * 90))))
+        local p_2 =((a / math.cos(gamma)) * math.sin(DEG2RAD(rotationdegree + (i * 90) + RAD2DEG(gamma))))
+        local p_3 =((a / math.cos(gamma)) * math.cos(DEG2RAD(rotationdegree + (i * 90) + RAD2DEG(gamma))))
+
+        surface.SetDrawColor(hsv2rgb(rainbow,1, 1, 1))
+        surface.DrawLine(x, y, x + p_0, y - p_1)
+        surface.DrawLine(x + p_0, y - p_1, x + p_2, y - p_3)
+    end
+    rotationdegree = rotationdegree + (frametime * 150)
+end
+
+hook.Add("SHUDPaint","1",function()
+    if ss.swasthair then
+        local screenW, screenH = ScrW() ,ScrH()
+        draw_svaston(screenW / 2, screenH / 2, screenH /2)
+    end
+end)
+
+local weaponparams = {
+    ["$basetexture"] = "sprites/physbeam",
+    ["$nodecal"] = 1,
+    ["$model"] = 1,
+    ["$additive"] = 1,
+    ["$nocull"] = 1,
+    Proxies = {
+        TextureScroll = {
+            texturescrollvar = "$basetexturetransform",
+            texturescrollrate = 0.4,
+            texturescrollangle = 70,
+        }
+    }
+}
+
+local armparams = {
+    ["$basetexture"] = "models/inventory_items/dreamhack_trophies/dreamhack_star_blur",
+    ["$nodecal"] = 1,
+    ["$model"] = 1,
+    ["$additive"] = 1,
+    ["$nocull"] = 1,
+    Proxies = {
+        TextureScroll = {
+            texturescrollvar = "$basetexturetransform",
+            texturescrollrate = 0.2,
+            texturescrollangle = 50,
+        }
+    }
+}
 
 
+local IsDrawingGlow = false
+local Glow = CreateMaterial("edgeglow","UnlitGeneric",weaponparams)
+local GlowTwo = CreateMaterial("edgeglow2","UnlitGeneric", armparams)
+
+hook.Add("PreDrawViewModel", "PreViewModelChams", function()
+    if ss.animcham then
+        render.SuppressEngineLighting(true)
+        if IsDrawingGlow then
+            render.SetColorModulation(1, 5, 20)
+            render.MaterialOverride(Glow)
+        else
+            render.SetColorModulation(1, 1, 1)
+        end
+        render.SetBlend(1)
+    end
+end)
+
+hook.Add("PostDrawViewModel", "PostViewModelChams", function()
+    if ss.animcham then
+        render.SetColorModulation(1, 1, 1)
+        render.MaterialOverride(None)
+        render.SetBlend(1)
+        render.SuppressEngineLighting(false)
+
+        if IsDrawingGlow then return end
+
+        IsDrawingGlow = true
+        LocalPlayer():GetViewModel():DrawModel()
+        IsDrawingGlow = false
+    end
+end)
+
+local atttime = 0.2
+
+local lastwep = LocalPlayer():GetActiveWeapon()
+
+local function propkill()
+
+    if LocalPlayer():GetActiveWeapon():GetClass() ~= "weapon_physgun" then
+        RunConsoleCommand("use", "weapon_physgun")
+        timer.Simple(0.3, function()
+            RunConsoleCommand("use", lastwep:GetClass())
+        end)
+    end
 
 
+    hook.Add("CreateMove", "PKill", function(cmd)
+        cmd:SetMouseWheel(100)
+    end)
+
+    RunConsoleCommand("gm_spawn", "models/props_c17/concrete_barrier001a.mdl")
+
+
+    timer.Simple(atttime, function()
+        RunConsoleCommand("+attack")
+    end)
+
+    timer.Simple(atttime + .1, function()
+        RunConsoleCommand("-attack")
+    end)
+
+    timer.Simple(0.5, function()
+        hook.Remove("CreateMove", "PKill")
+        RunConsoleCommand("undo")
+    end)
+end
+
+
+concommand.Add("ss_pkill", propkill)
+
+surface.CreateFont("45", {font = "Bahnschrift", extended = false, size = 30, weight = 1000, antialias = true})
+surface.CreateFont(
+    "56",
+    {font = "Bahnschrift", extended = false, size = 30, blursize = 4, weight = 1000, antialias = true}
+)
+local a = {}
+hook.Add("SHUDPaint", "123", function()
+    if ss.hitmarker then
+        local b = {}
+            for c, d in pairs(a) do
+                cam.Start3D()
+                local e = d.pos:ToScreen()
+                local f = e.x
+                local g = e.y
+                cam.End3D()
+                cam.Start2D()
+                surface.SetFont("56")
+                local h = surface.GetTextSize(tostring(d.num))
+                surface.SetTextColor(0, 0, 0, 255 * d.life)
+                surface.SetTextPos(f - h / 2, g)
+                surface.DrawText(tostring(d.num))
+                surface.SetFont("45")
+                surface.SetTextColor(255, 255 - d.num, 255 - d.num, 255 * d.life)
+                surface.SetTextPos(f - h / 2, g)
+                surface.DrawText(tostring(d.num))
+                d.pos = d.pos + Vector(0, 0, RealFrameTime() * 32)
+                d.pos = d.pos + d.vec * RealFrameTime() * 8
+                d.life = d.life - RealFrameTime() * 1 / 0.75
+                if d.life > 0 then
+                    table.insert(b, d)
+                end
+                cam.End2D()
+            end
+            a = b
+        end
+    end
+)
+gameevent.Listen("player_hurt")
+hook.Add("player_hurt", "11", function(i)
+    if ss.hitmarker then
+            local j = 0
+            for d, l in pairs(player.GetAll()) do
+                if l:UserID() == i.userid then
+                    entt = l
+                    j = l:Health()
+                end
+                if l:UserID() == i.attacker then
+                    k = l
+                end
+            end
+            if entt:Health() == 0 then
+                return
+            end
+            if not k == LocalPlayer() then
+                return
+            end
+            local k = entt:GetPos() + Vector(0, 0, 60)
+            local m = string.Replace(i.health - j, "-", "")
+            m = math.Round(m, 1)
+            table.insert(a, {pos = k, life = 1, num = m, vec = VectorRand()})
+        end
+    end
+)
+
+hook.Add("Think","z",function()
+    if ss.rainbowphys then
+        local RainbowPlayer=HSVToColor(CurTime()% 6*60,1,1) LocalPlayer():SetWeaponColor(Vector(RainbowPlayer.r/255,RainbowPlayer.g/255,RainbowPlayer.b/255)) LocalPlayer():SetPlayerColor(Vector(RainbowPlayer.r/255,RainbowPlayer.g/255,RainbowPlayer.b/255))
+    end
+end)
+
+local FPS_table = {}
+local MS_table = {}
+Max_fps_nodes = 40
+Max_ms_nodes = 40
+FPS_inc = 0
+
+makeHook("SHUDPaint", function()
+    if ss.getgood then
+        FPS_get = (1/FrameTime())
+        MS_get = LocalPlayer():Ping()
+
+        if FPS_get > FPS_inc then FPS_inc = FPS_inc + 0.5 elseif FPS_get < FPS_inc then FPS_inc = FPS_inc - 1 end
+
+        surface.SetDrawColor( 255,255,255,255 )
+        surface.DrawRect( ScrW()/1.115, ScrH()/1.383, Max_fps_nodes * 5,300)
+
+        surface.SetDrawColor( 50,50,50,255 )
+        surface.DrawRect( ScrW()/1.115, ScrH()/1.42, Max_fps_nodes * 5,20)
+
+        surface.SetDrawColor( 50,50,50,255 )
+        surface.DrawRect( ScrW()/1.115, ScrH()/1.35, 20,1)
+
+        surface.SetDrawColor( 50,50,50,255 )
+        surface.DrawRect( ScrW()/1.115, ScrH()/1.35 + 115, 20,1)
+
+        surface.SetFont( "Default" )
+        surface.SetTextColor( 50,50,50,255 )
+        surface.SetTextPos( ScrW()/1 - 20, ScrH()/1.35)
+        surface.DrawText("250")
+
+        surface.SetFont( "Default" )
+        surface.SetTextColor( 50,50,50,255 )
+        surface.SetTextPos( ScrW()/1 - 20, ScrH()/1.35 + 115)
+        surface.DrawText("150")
+
+        for k,v in pairs( FPS_table ) do
+
+            surface.SetDrawColor( 50,50,50,255 )
+            surface.DrawRect( ScrW()/1 + -k*5, ScrH()/1 - v, 5,5 + v)
+
+            surface.SetFont( "TargetIDSmall" )
+            surface.SetTextColor( 255,255,255,255 )
+            surface.SetTextPos( ScrW()/1.11, ScrH()/1.4155)
+            surface.DrawText("FPS "..math.Round(FPS_inc))
+
+        end
+
+        for k,v in pairs( MS_table ) do
+
+            surface.SetDrawColor( 200,200,200,255 )
+            surface.DrawRect( ScrW()/1 + -k*5, ScrH()/1 - v, 5,5 + v)
+
+            surface.SetFont( "TargetIDSmall" )
+            surface.SetTextColor( 255,255,255,255 )
+            surface.SetTextPos( ScrW()/1.07, ScrH()/1.4155)
+            surface.DrawText(" |    Ms "..math.Round(MS_get))
+
+        end
+    end
+
+
+end)
+
+timer.Create("timerinc",0.1, 0, function()
+    if ss.getgood then
+        table.insert(FPS_table,1,math.Clamp(FPS_get,0,300))
+
+        if table.Count(FPS_table) > Max_fps_nodes then
+        table.remove(FPS_table)
+        end
+    end
+end)
+timer.Create("timerms",0.1, 0, function()
+    if ss.getgood then
+        table.insert(MS_table,1,math.Clamp(MS_get,0,300))
+
+        if table.Count(MS_table) > Max_ms_nodes then
+        table.remove(MS_table)
+        end
+    end
+end)
 
 --thanks times hack lol
-  
+
  print("\n")
  MsgC(Color(61, 149, 217), " ¦¦¦¦¦¦¦+¦¦+¦¦¦¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦¦¦¦¦¦+¦¦¦¦¦¦+¦¦¦+¦¦¦¦¦\n¦¦+----+¦¦¦¦¦¦¦¦¦¦¦+----+¦¦¦¦¦¦+----+¦¦+--¦¦+¦¦¦¦¦¦¦¦\n+¦¦¦¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦+¦¦¦¦+¦¦¦¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦\n¦+---¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦+¦¦+¦¦¦¦+---¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦\n¦¦¦¦¦¦+++¦¦¦¦¦¦+++¦¦¦¦¦¦++¦¦+¦¦¦¦¦¦+++¦¦¦¦¦++¦¦¦¦¦¦¦+\n+-----+¦¦+-----+¦¦+-----+¦+-++-----+¦¦+----+¦+------+\n")
-  
+
  notification.AddLegacy("sug.sol loaded, have fun. Check console for info!", NOTIFY_HINT, 5)
  surface.PlaySound( "buttons/button15.wav" )
- 
