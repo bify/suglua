@@ -1,7 +1,7 @@
 local midW, midH = ScrW() / 2, ScrH() / 2
 
 --s0lum is cool 8)
-
+--aaaa
 
 local colors = {
     white = Color(255, 255, 255),
