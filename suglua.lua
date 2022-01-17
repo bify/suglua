@@ -1,7 +1,101 @@
+MsgC(Color(255,0,0), [[
+_-.    _.._ _.-'`                         Sugoma.Solutions
+.-; \ \-'`    ` _..-'                      monkey hook
+_.-\_\-'`__...__..'
+-'   __.--'` /
+_.'`   \_ _/                               not skid no skid
+ |  \
+ ;   \    .-'```'-.
+  \"  \  /   "   " \
+   \"  \| ".--.--.  |
+    \_  ; / _   _ \ ;                      https://sugoma.solutions/
+     | ( (  e _ e  ) )
+      \ '-|   T   |-'_
+       \" \   =   /"  `\
+        \  '-...-' ,  " \
+         Y  "    "  \    \
+         |"  .     " \  " \
+         |      " _.-'   " )
+         \ "/\._;'    "_.;`
+          \_\_\.> ".''`  |
+          /_/|_) .'    " /---..
+           \ '--'    "     "   `\
+      .-""-.>     "       ,   "  |
+     / "      "       "    |     /
+     \   "  \  " _.`--...-'|   "/
+      '."    \.-'         / " .'
+        '-. " \       __.'  .'
+           )   `\    (_   "(
+          /   /\_)     `\   \
+         (((_/           \_)))
+
+
+]])
+
+print([[
+Sugoma is cool cheat made by marge(STEAM_0:0:556353067) with help from big cool dude s0lum!
+Sugoma better then mamaphine.solution dont worry too much visual hack for you 8)
+To open menu do ss_menu in console and to edit colors open your context menu!
+
+IF IN THE MENU IT SAYS (SG) IT IS SCREENGRABABLE
+
+]])
+
+local ss = {
+    bhop = false,
+    autostrafe = true,
+    txtespPLAYER = true,
+    txtespPROP = false,
+    chams = false,
+    chams_col = Color(255,255,255),
+    chams_a = 255,
+    chams_lighting = false,
+    pchams = false,
+    pchams_col = Color(0,255,255),
+    pchams_a = 150,
+    pchams_lighting = true,
+    random_col = Color(0,255,255, 255),
+    hchams_col = Color(255, 0, 0, 255),
+    hands = false,
+    box_col = Color(255, 255, 255, 255),
+    menu_col = Color(0, 255, 255, 255),
+    glow_col = Color(0, 255, 255, 255),
+    tps = 1,
+    box = false,
+    wallsx = false,
+    wallsxb = true,
+    wallsxp = false,
+    getgood = false,
+    watermark = false,
+    toggle = false,
+    grabber = false,
+    speclist = false,
+    nightmode = false,
+    crosshair = false,
+    esp_hitboxes = false,
+    eyetrace = false,
+    skelly = false,
+    circlehead = false,
+    gdance = true,
+    fillbox = true,
+    glow = false,
+    boxesphealth = false,
+    boxesps = true,
+    keypads = false,
+    fire = false,
+    aimkey = KEY_DOWN, --place holder cuz nobody uses this key
+    swasthair = false,
+    animcham = false,
+    hitmarker = false,
+    hitsound = false,
+    rainbowphys = false,
+    material = 'models/debug/debugwhite',
+    aimpos = 'eyes',
+    fov = 120,
+}
+
 local midW, midH = ScrW() / 2, ScrH() / 2
-
---s0lum is cool 8)
-
+lply = LocalPlayer()
 
 local colors = {
     white = Color(255, 255, 255),
@@ -21,152 +115,6 @@ local colors = {
     aliceblue = Color(240, 248, 255),
     newblue = Color(0, 250, 250)
 }
-
-
---START OF CONFIGING SECTION (IF YALL WANNA SHARE CONFIGS OR SUM JUST COPY AND PASTE INTO HERE)
-local ss = {
-
-    bhop = true,
-
-    txtespPLAYER = true,
-    txtespPROP = false,
-
-    chams = true,
-    chams_col = Color(255,255,255),
-    chams_a = 255,
-    chams_lighting = false,
-
-    pchams = false,
-    pchams_col = Color(0,255,255),
-    pchams_a = 150,
-    pchams_lighting = true,
-
-    random_col = Color(0,255,255, 255),
-
-
-    hchams_col = Color(255, 0, 0, 255),
-    hands = false,
-
-    box_col = Color(255, 255, 255, 255),
-
-    menu_col = Color(0, 255, 255, 255),
-
-    glow_col = Color(0, 255, 255, 255),
-
-    tps = 1,
-    box = false,
-
-    wallsx = false,
-    wallsxb = true,
-    wallsxp = false,
-
-    getgood = false,
-    watermark = true,
-
-    toggle = false,
-
-    grabber = false,
-
-    speclist = false,
-
-    nightmode = false,
-
-    crosshair = false,
-
-
-    esp_hitboxes = false,
-    eyetrace = false,
-
-    skelly = false,
-
-    circlehead = false,
-
-    gdance = true,
-
-    fillbox = true,
-
-    glow = true,
-
-    boxesphealth = false,
-    boxesps = true,
-    keypads = false,
-
-    fire = false,
-
-    swasthair = false,
-    animcham = false,
-
-    hitmarker = false,
-    hitsound = false,
-
-    rainbowphys = false,
-
-
-
-    material = 'models/debug/debugwhite',
-    aimpos = 'eyes',
-
-    fov = 120,
-}
---END OF CONFIG SECTION
-
---local noob = surface.CreateFont("", {--[[ tdata here]]})
-
-surface.CreateFont( "Specialneeds", {
-    font = "Arial",
-    extended = false,
-    size = 15,
-    weight = 500,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = false,
-} )
-
-surface.CreateFont( "titles", {
-    font = "Arial",
-    extended = false,
-    size = 25,
-    weight = 750,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = true,
-} )
-
-surface.CreateFont( "Specialneeds2", {
-    font = "Arial",
-    extended = false,
-    size = 13,
-    weight = 500,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = false,
-} )
-
-
 local function ConsolePrintRainbow( frequency, str )
 	local text = {}
 	for i = 1, #str do
@@ -182,14 +130,135 @@ end
 
 ConsolePrintRainbow( 10, "get good get sugoma! Https://sugoma.solutions/")
 
-print([[
-Sugoma is cool cheat made by marge(STEAM_0:0:556353067) with help from big cool dude s0lum!
-Sugoma has a propkill base with a aimbot and many visual options so it will work for propkill and sandboxes.
-Sugoma has not in any way try to stop screengrab or triggering anti cheats so like, y'know!
-To open menu do ss_menu in console and to edit colors open your context menu!
+local function makelabel(name, string, font, w, h, x, y, color, parent)
+  local name = vgui.Create( "DLabel", parent )
+  name:SetPos( x, y )
+  name:SetSize( w, h)
+  name:SetColor(color)
+  name:SetFont(font)
+  name:SetText(string)
+end
 
-]])
+local function DrawRect(parent, color, color2, w, h, x, y)
+    if color then
+        surface.SetDrawColor(color)
+    else
+        surface.SetDrawColor(Color(46,46,46,240))
+    end
 
+    surface.DrawRect(x or 0, y or 0, w or parent:GetWide(), h or parent:GetTall() )
+
+    if col2 then
+        surface.SetDrawColor(color2)
+    else
+        surface.SetDrawColor(colors.black)
+    end
+
+    surface.DrawOutlinedRect(x or 0, y or 0, w or parent:GetWide(), h or parent:GetTall())
+end
+
+local function checkbox( name, tooltip, val, x, y, parent )
+    local checkbox = vgui.Create( 'DCheckBoxLabel', parent )
+    checkbox:SetText(name)
+    checkbox:SetPos( x, y )
+    checkbox:SetFont('DermaDefault')
+    checkbox:SetTextColor(colors.white)
+    checkbox:SetChecked( ss[val] )
+    if isstring( tooltip ) then
+        checkbox:SetTooltip( tooltip )
+    end
+    function checkbox:OnChange(bval)
+        ss[val] = bval
+    end
+    function checkbox:PaintOver()
+    draw.RoundedBox( 0, 0, 0, 15, 15, colors.black )
+        if checkbox:GetChecked() then
+            draw.RoundedBox( 0, 4, 4, 7.5, 7.5, Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b) )
+        end
+    end
+end
+
+local function slider( name, val, min, max, x, y, w, h, parent)
+    local DOCK = vgui.Create("DPanel", parent)
+        DOCK:SetSize(w, h)
+        DOCK:SetPos(x, y)
+        DOCK:SetBackgroundColor( Color(0,0,0,0) )
+    local slider = vgui.Create( 'DNumSlider', DOCK)
+        slider:SetMin( min )
+        slider:SetMax( max )
+        slider:SetText( '' )
+        slider:Dock(FILL)
+        slider:SetValue( ss[val] )
+        slider:SetDecimals(0)
+    function slider.Slider.Knob:Paint()
+        DrawRect(self, Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b), Color(52,61,70), self:GetWide() / 2, self:GetTall(), 7)
+    end
+    function DOCK:Paint(w, h)
+        draw.SimpleText(name, 'DermaDefault', 10, 0, colors.white, 0, 0)
+    end
+    function slider:OnValueChanged( num )
+        ss[val] = num
+    end
+end
+
+local function colorthing( val, x, y, w, h, parent)
+    local DOCK = vgui.Create("DPanel", parent)
+        DOCK:SetSize(w, h)
+        DOCK:SetPos(x, y)
+        DOCK:SetBackgroundColor( Color(0,0,0,0) )
+    local colorbox = vgui.Create( 'DColorMixer', DOCK)
+        colorbox:Dock(FILL)
+        colorbox:SetPalette(false)
+        colorbox:SetAlphaBar(false)
+        colorbox:SetWangs(false)
+        colorbox:SetColor(Color(30,100,160))
+    function colorbox:Paint()
+        DrawRect(self, colors.newblue, Color(52,61,70), self:GetWide() / 2, self:GetTall(), 7)
+    end
+
+    function colorbox:ValueChanged( col )
+        ss[val] = col
+    end
+
+end
+
+surface.CreateFont( "titles", {
+    font = "coolvetica",extended = false,size = 25,weight = 750,blursize = 0,scanlines = 0,antialias = true,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = true,
+} )
+surface.CreateFont( "Specialneeds2", {
+    font = "Arial",extended = false,size = 13,weight = 500,blursize = 0,scanlines = 0,antialias = true,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
+surface.CreateFont( "Propsenseamon", {
+    font = "Arial",extended = false,size = 20,weight = 200,blursize = 0,scanlines = 0,antialias = true,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
+
+surface.CreateFont( "boosls", {
+    font = "Arial",extended = false,size = 14,weight = 200,blursize = 0,scanlines = 0,antialias = true,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
+
+surface.CreateFont( "booslssd", {
+    font = "Arial",extended = false,size = 16,weight = 200,blursize = 0,scanlines = 0,antialias = true,
+    underline = false,italic = false,strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
+
+surface.CreateFont( "Propsenseamon2", {
+    font = "Arial",extended = false,size = 20,weight = 400,blursize = 0,scanlines = 0,antialias = true,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
+
+surface.CreateFont( "infos", {
+    font = "coolvetica",extended = true,size = 25,weight = 100,blursize = 0,scanlines = 0,antialias = false,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
+
+surface.CreateFont( "infotitle", {
+    font = "coolvetica",extended = false,size = 25,weight = 100,blursize = 0,scanlines = 0,antialias = true,underline = false,italic = false,
+    strikeout = false,symbol = false,rotary = false,shadow = false,additive = false,outline = false,
+} )
 
 local DebugWhite = Material("models/debug/debugwhite")
 local Wireframe = Material("models/wireframe")
@@ -243,24 +312,6 @@ local function isValid(object)
     return isvalid( object )
 end
 
-local function DrawRect(parent, color, color2, w, h, x, y)
-    if color then
-        surface.SetDrawColor(color)
-    else
-        surface.SetDrawColor(Color(46,46,46,240))
-    end
-
-    surface.DrawRect(x or 0, y or 0, w or parent:GetWide(), h or parent:GetTall() )
-
-    if col2 then
-        surface.SetDrawColor(color2)
-    else
-        surface.SetDrawColor(colors.black)
-    end
-
-    surface.DrawOutlinedRect(x or 0, y or 0, w or parent:GetWide(), h or parent:GetTall())
-end
-
 local fakeRT = GetRenderTarget( "fakeRT" .. os.time(), ScrW(), ScrH() )
 
 makeHook( "RenderScene", function( vOrigin, vAngle, vFOV )
@@ -294,93 +345,6 @@ makeHook( "ShutDown", function()
     render.SetRenderTarget()
 end )
 
-local tply = ss.friends
-
---[[-------------------------------------------------------------------------
-    Menu Element func
----------------------------------------------------------------------------]]
--------
-local function checkbox( name, tooltip, val, x, y, parent )
-    local checkbox = vgui.Create( 'DCheckBoxLabel', parent )
-    checkbox:SetText(name)
-    checkbox:SetPos( x, y )
-    checkbox:SetFont('Specialneeds2')
-    checkbox:SetTextColor(colors.white)
-    checkbox:SetChecked( ss[val] )
-    if isstring( tooltip ) then
-        checkbox:SetTooltip( tooltip )
-    end
-    function checkbox:OnChange(bval)
-        ss[val] = bval
-    end
-    function checkbox:PaintOver()
-    draw.RoundedBox( 0, 0, 0, 15, 15, colors.black )
-        if checkbox:GetChecked() then
-            draw.RoundedBox( 0, 4, 4, 7.5, 7.5, Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b) )
-        end
-    end
-end
-
-
-local function slider( name, val, min, max, x, y, w, h, parent)
-    local DOCK = vgui.Create("DPanel", parent)
-        DOCK:SetSize(w, h)
-        DOCK:SetPos(x, y)
-        DOCK:SetBackgroundColor( Color(0,0,0,0) )
-    local slider = vgui.Create( 'DNumSlider', DOCK)
-        slider:SetMin( min )
-        slider:SetMax( max )
-        slider:SetText( '' )
-        slider:Dock(FILL)
-        slider:SetValue( ss[val] )
-        slider:SetDecimals(0)
-    function slider.Slider.Knob:Paint()
-        DrawRect(self, Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b), Color(52,61,70), self:GetWide() / 2, self:GetTall(), 7)
-    end
-    function DOCK:Paint(w, h)
-        draw.SimpleText(name, 'Specialneeds2', 10, 0, colors.white, 0, 0)
-    end
-    function slider:OnValueChanged( num )
-        ss[val] = num
-    end
-end
-
-local function colorthing( val, x, y, w, h, parent)
-    local DOCK = vgui.Create("DPanel", parent)
-        DOCK:SetSize(w, h)
-        DOCK:SetPos(x, y)
-        DOCK:SetBackgroundColor( Color(0,0,0,0) )
-    local colorbox = vgui.Create( 'DColorMixer', DOCK)
-        colorbox:Dock(FILL)                    -- Make Mixer fill place of Frame
-        colorbox:SetPalette(false)              -- Show/hide the palette                 DEF:true
-        colorbox:SetAlphaBar(false)             -- Show/hide the alpha bar                 DEF:true
-        colorbox:SetWangs(false)                 -- Show/hide the R G B A indicators     DEF:true
-        colorbox:SetColor(Color(30,100,160))     -- Set the default color
-    function colorbox:Paint()
-        DrawRect(self, colors.newblue, Color(52,61,70), self:GetWide() / 2, self:GetTall(), 7)
-    end
-    --[[function DOCK:Paint(w, h)
-        draw.SimpleText(name, 'labelFONT', 10, 0, colors.white, 0, 0)
-    end]]
-    function colorbox:ValueChanged( col )
-        ss[val] = col
-    end
-
-end
-
---[[Mixer:Dock(FILL)                    -- Make Mixer fill place of Frame
-Mixer:SetPalette(true)              -- Show/hide the palette                 DEF:true
-Mixer:SetAlphaBar(true)             -- Show/hide the alpha bar                 DEF:true
-Mixer:SetWangs(true)                 -- Show/hide the R G B A indicators     DEF:true
-Mixer:SetColor(Color(30,100,160))     -- Set the default color]]
-
-
-
-
---[[-------------------------------------------------------------------------
-    Menu func
----------------------------------------------------------------------------]]
-
 local menuderma
 function SUGUI()
     local menuderma = vgui.Create( "DFrame" )
@@ -394,93 +358,80 @@ function SUGUI()
     menuderma.Paint = function(s , w , h)
         draw.RoundedBox(1,5,0,w , h,Color(25,25,25, 250))
         draw.RoundedBox( 0, 10, 5, 710, 35, Color(40,40,40, 255) )
-        draw.RoundedBox( 0, 10, 45, 710, 470, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 15, 65, 180, 75, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 16, 66, 178, 73, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 15, 180, 180, 120, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 16, 181, 178, 118, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 225, 210, 180, 90, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 226, 211, 178, 88, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 15, 330, 180, 180, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 16, 331, 178, 178, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 225, 330, 180, 90, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 226, 331, 178, 88, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 225, 450, 180, 60, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 226, 451, 178, 58, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 225, 65, 180, 114, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 226, 66, 178, 112, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 435, 65, 280, 235, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 436, 66, 278, 233, Color(40,40,40, 255) )
-
-        draw.RoundedBox( 0, 435, 330, 280, 180, Color(255,255,255, 255) )
-        draw.RoundedBox( 0, 436, 331, 278, 178, Color(40,40,40, 255) )
 
 
     end
 
-    local DLabels = vgui.Create( "DLabel", menuderma )
-    DLabels:SetPos( 15, 50 )
-    DLabels:SetSize( 50, 10)
-    DLabels:SetColor(colors.red)
-    DLabels:SetFont('Specialneeds2')
-    DLabels:SetText( "Aimbot" )
+    local PropertySheet = vgui.Create( "DColumnSheet", menuderma )
+    PropertySheet:SetPos( 10, 45 )
+    PropertySheet:SetSize( 710, 470 )
+    PropertySheet.Paint = function( self, w, h ) draw.RoundedBox( 0, 0, 0, w, h, Color( 40, 40, 40, self:GetAlpha() ) ) end
 
-    local DLabels = vgui.Create( "DLabel", menuderma )
-    DLabels:SetPos( 225, 50 )
-    DLabels:SetSize( 150, 10)
-    DLabels:SetColor(colors.red)
-    DLabels:SetFont('Specialneeds2')
-    DLabels:SetText( "ESP Settings" )
+    local panel1 = vgui.Create( "DPanel", PropertySheet )
+    panel1:Dock( FILL )
+    panel1.Paint = function( self, w, h )
+      draw.RoundedBox( 4, 0, 0, w, h, Color( 30, 30, 30, self:GetAlpha() ) )
+      surface.SetDrawColor(255,255,255,255)
+      surface.DrawOutlinedRect( 10, 20, 350, 450, 2 )
+      surface.DrawOutlinedRect( 370, 20, 215, 450, 2 )
+      draw.DrawText( "Self", "DermaDefault", 10, 5, Color( 255, 255, 255, 255 ), 0 )
+      draw.DrawText( "Others", "DermaDefault", 370, 5, Color( 255, 255, 255, 255 ), 0 )
+    end
+    PropertySheet:AddSheet( "Visuals", panel1, "icon16/photo.png" )
 
-    local DLabels = vgui.Create( "DLabel", menuderma )
-    DLabels:SetPos( 435, 50 )
-    DLabels:SetSize( 150, 10)
-    DLabels:SetColor(colors.red)
-    DLabels:SetFont('Specialneeds2')
-    DLabels:SetText( "ESP Misc Plr" )
+    local panel2 = vgui.Create( "DPanel", PropertySheet )
+    panel2:Dock( FILL )
+    panel2.Paint = function( self, w, h )
+      draw.RoundedBox( 4, 0, 0, w, h, Color( 30, 30, 30, self:GetAlpha() ) )
+      surface.SetDrawColor(255,255,255,255)
+      surface.DrawOutlinedRect( 10, 20, 350, 450, 2 )
+      surface.SetDrawColor(0,255,0,255)
+      surface.DrawOutlinedRect( 410, 120, 107.5, 225, 1 )
+      draw.DrawText( "Name: "..lply:Name(), "DermaDefault", 410, 105, Color( 0, 255, 0, 255 ), 0 )
+      draw.DrawText( "Misc", "DermaDefault", 10, 5, Color( 255, 255, 255, 255 ), 0 )
+    end
+    PropertySheet:AddSheet( "Misc", panel2, "icon16/pill.png" )
 
-    local DLabelss = vgui.Create( "DLabel", menuderma )
-    DLabelss:SetPos( 15, 160 )
-    DLabelss:SetSize( 50, 10)
-    DLabelss:SetColor(colors.red)
-    DLabelss:SetFont('Specialneeds2')
-    DLabelss:SetText( "ESP" )
+    local guy = vgui.Create( "DModelPanel", panel2 )
+    guy:SetSize( 200, 400 )
+    guy:SetPos(380, 25)
+    guy:SetModel( "models/player/hostage/hostage_04.mdl" )
+    function guy:LayoutEntity( ent )
+        if ss.gdance then
+            ent:SetSequence( ent:LookupSequence( "taunt_laugh" ) )
+            if( ent:GetCycle() > 0.97 ) then ent:SetCycle( 0.02 ) end
+            guy:RunAnimation()
+        end
+    end
 
-    local DLabelsss = vgui.Create( "DLabel", menuderma )
-    DLabelsss:SetPos( 225, 190 )
-    DLabelsss:SetSize( 200, 10)
-    DLabelsss:SetColor(colors.red)
-    DLabelsss:SetFont('Specialneeds2')
-    DLabelsss:SetText( "ESP Sliders" )
+    local panel3 = vgui.Create( "DPanel", PropertySheet )
+    panel3:Dock( FILL )
+    panel3.Paint = function( self, w, h )
+      draw.RoundedBox( 4, 0, 0, w, h, Color( 30, 30, 30, self:GetAlpha() ) )
+      surface.SetDrawColor(255,255,255,255)
+      surface.DrawOutlinedRect( 235, 20, 350, 450, 2 )
+      surface.DrawOutlinedRect( 10, 20, 215, 450, 2 )
+      draw.DrawText( "Toggles", "DermaDefault", 10, 5, Color( 255, 255, 255, 255 ), 0 )
+      draw.DrawText( "Customization", "DermaDefault", 235, 5, Color( 255, 255, 255, 255 ), 0 )
+    end
+    PropertySheet:AddSheet( "Aimbot", panel3, "icon16/user.png" )
 
-    local DLabelssss = vgui.Create( "DLabel", menuderma )
-    DLabelssss:SetPos( 225, 315 )
-    DLabelssss:SetSize( 200, 10)
-    DLabelssss:SetColor(colors.red)
-    DLabelssss:SetFont('Specialneeds2')
-    DLabelssss:SetText( "Client Sliders" )
+    local panel4 = vgui.Create( "DPanel", PropertySheet )
+    panel4:Dock( FILL )
+    panel4.Paint = function( self, w, h )
+      draw.RoundedBox( 4, 0, 0, w, h, Color( 30, 30, 30, self:GetAlpha() ) )
+      surface.SetDrawColor(255,255,255,255)
+      draw.DrawText( "Sliders", "DermaDefault", 10, 5, Color( 255, 255, 255, 255 ), 0 )
+      surface.DrawOutlinedRect( 10, 20, 575, 450, 2 )
+    end
+    PropertySheet:AddSheet( "Sliders", panel4, "icon16/text_linespacing.png" )
 
-    local DLabelssss = vgui.Create( "DLabel", menuderma )
-    DLabelssss:SetPos( 225, 435 )
-    DLabelssss:SetSize( 200, 10)
-    DLabelssss:SetColor(colors.red)
-    DLabelssss:SetFont('Specialneeds2')
-    DLabelssss:SetText( "Movement" )
-
-    local DLabelsssss = vgui.Create( "DLabel", menuderma )
-    DLabelsssss:SetPos( 435, 315 )
-    DLabelsssss:SetSize( 200, 10)
-    DLabelsssss:SetColor(colors.red)
-    DLabelsssss:SetFont('Specialneeds2')
-    DLabelsssss:SetText( "Client Visuals" )
+    local panel5 = vgui.Create( "DPanel", PropertySheet )
+    panel5:Dock( FILL )
+    panel5.Paint = function( self, w, h )
+      draw.RoundedBox( 4, 0, 0, w, h, Color( 30, 30, 30, self:GetAlpha() ) )
+    end
+    PropertySheet:AddSheet( "Colors", panel5, "icon16/ruby.png" )
 
     local cbutton = vgui.Create('DButton', menuderma)
     cbutton:SetText('')
@@ -494,71 +445,50 @@ function SUGUI()
         draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.red)
     end
 
-    local cbuttons = vgui.Create('DButton', menuderma)
-    cbuttons:SetText('')
-    cbuttons:SetTextColor(colors.black)
-    cbuttons:SetSize(16, 16)
-    cbuttons:SetPos(menuderma:GetWide() - cbuttons:GetWide() - 30, 15)
-    function cbuttons:DoClick()
-        RunConsoleCommand('ss_cmenu')
+    local ebutton = vgui.Create('DButton', panel1)
+    ebutton:SetText('Entity Menu')
+    ebutton:SetTextColor(colors.grey)
+    ebutton:SetSize(100, 16)
+    ebutton:SetPos(380, 330)
+    function ebutton:DoClick()
+          concommand.Run( LocalPlayer(), "entlist", 0, 0 )
     end
-    function cbuttons:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.newblue)
+    function ebutton:Paint()
+        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
     end
 
 
-    checkbox("MOV:Bhop", "Toggle Bhop", 'bhop', 230, 455, menuderma )
-    checkbox("CLI:Grabber", "Toggle Grabber/prop prediction", 'grabber', 440, 455, menuderma )
-    checkbox("CLI:Crosshair", "shootbox", 'crosshair', 440, 425, menuderma )
-    checkbox("ESP:Hitbox", "Player Hitbox", 'esp_hitboxes', 440, 70, menuderma )
-    checkbox("ESP:Eye Tracer", "Trace enemy eyes", 'eyetrace', 440, 130, menuderma )
-    checkbox("ESP:Skeleton", "Draw bones on model", 'skelly', 440, 100, menuderma )
-    checkbox("CLI:Hand Cham", "Toggle Hand Cham", 'hands', 440, 485, menuderma )
-    checkbox("ESP:Player Names", "Toggle Names", 'txtespPLAYER', 20, 215, menuderma )
-    checkbox("ESP:Player Chams", "Toggle Chams", 'chams', 20, 185, menuderma )
-    checkbox("ESP:Prop Names", "Toggle Prop Names", 'txtespPROP', 20, 275, menuderma )
-    checkbox("ESP:Prop Cham", "Toggle Prop Chams", 'pchams', 20, 245, menuderma )
-    checkbox("ESP:3D Box", "Toggle Box Esp", 'box', 440, 160, menuderma )
-
-    checkbox("CLI:ThirdPerson(TP)", "its like view", 'tps', 440, 395, menuderma )
-    checkbox("ESP:Head Circle", "its like circle", 'circlehead',440, 220, menuderma )
-    checkbox("ESP:Glow", "its like glowing", 'glow',440, 250, menuderma )
-    checkbox("CLI:Menu Animate", "its like dance", 'gdance', 580, 335, menuderma )
-    checkbox("CLI:Keypad Logger", "its like Keypads", 'keypads', 580, 365, menuderma )
-    checkbox("CLI:Nightmode", "its like night", 'nightmode', 580, 395, menuderma )
-    checkbox("CLI:Swasthair", "its like german", 'swasthair', 580, 425, menuderma )
-    checkbox("CLI:Animate Hand", "its like hand but anim", 'animcham', 580, 455, menuderma )
-    checkbox("CLI:Gay Physgun", "its like raindno", 'rainbowphys', 580, 485, menuderma )
-    checkbox("ESP:2D Box", "Player boxes", 'boxesps', 580, 70, menuderma )
-    checkbox("ESP:2D Box(Health)", "Player Boxes", 'boxesphealth', 580, 100, menuderma )
-    checkbox("ESP:Hitmarker", "Player Hitmark", 'hitmarker', 580, 130, menuderma )
-    checkbox("ESP:Hitsound", "Player Hitsound", 'hitsound', 580, 160, menuderma )
-    checkbox("ESP:3D Box Fill", "Fill 3D Box ESP", 'fillbox', 440, 190, menuderma )
-
-    checkbox("ESP:Ply Walls", "its like view", 'wallsx', 230, 130, menuderma )
-    checkbox("ESP:Prop Walls", "its like view", 'wallsxp', 230, 160, menuderma )
-
-    checkbox("CLI:Info", "its like debig", 'getgood', 440, 365, menuderma )
-    checkbox("CLI:Watermark", "its like mark", 'watermark', 440, 335, menuderma )
-
-    checkbox("ESP:Ply Flat", "Toggle PNames", 'chams_lighting', 230, 70, menuderma )
-    checkbox("ESP:Prop Flat", "Toggle PNames", 'pchams_lighting', 230, 100, menuderma )
-    --checkbox("AIM:Legit Aimbot", "Toggle aimbot", 'softaimbot', 20, 110, menuderma )
-
-    slider( "CLI:FOV", "fov", 1, 170, 230, 335, 190, 20, menuderma)
-    slider( "ESP:Ply  A", "chams_a", 1, 255, 230, 230, 190, 20, menuderma)
-    slider( "ESP:Prop A", "pchams_a", 1, 255, 230, 260, 190, 20, menuderma)
-
-    slider('CLI:Ddos server', 'tps_y', 0, 360, 230, 365, 190, 20, menuderma)
-    slider('CLI:Get ip', 'tps_h', 0, 100, 230, 395, 190, 20, menuderma)
-
-
-    checkbox("AIM:Fire", "Toggle Aimbot fire", 'fire', 20, 110, menuderma )
-
-
-
-    local ptbox = vgui.Create( 'DComboBox', menuderma )
-    ptbox:SetPos( 440, 270 )
+    -- end of VGUI start of checks and stuff
+    checkbox("ESP:Player Chams(SG)", "Toggle Chams", 'chams', 380, 30, panel1 )
+    checkbox("ESP:Prop Cham(SG)", "Toggle Prop Chams", 'pchams', 380, 45, panel1 )
+    checkbox("ESP:Player Names", "Toggle Names", 'txtespPLAYER', 380, 60, panel1 )
+    checkbox("ESP:Prop Names", "Toggle Prop Names", 'txtespPROP', 380, 75, panel1 )
+    checkbox("ESP:Hitbox(SG)", "Player Hitbox", 'esp_hitboxes', 380, 90, panel1 )
+    checkbox("ESP:Eye Tracer", "Trace enemy eyes", 'eyetrace', 380, 105, panel1 )
+    checkbox("ESP:Head Circle", "its like circle", 'circlehead',380, 120, panel1 )
+    checkbox("ESP:Skeleton", "Draw bones on model", 'skelly', 380, 135, panel1 )
+    checkbox("ESP:3D Box", "Toggle Box Esp", 'box', 380, 150, panel1 )
+    checkbox("ESP:3D Box Fill", "Fill 3D Box ESP", 'fillbox', 380, 165, panel1 )
+    checkbox("ESP:2D Box", "Player boxes", 'boxesps', 380, 180, panel1 )
+    checkbox("ESP:2D Box(Health)", "Player Boxes", 'boxesphealth', 380, 195, panel1 )
+    checkbox("ESP:Ply Walls(SG)", "its like view", 'wallsx', 380, 210, panel1 )
+    checkbox("ESP:Prop Walls(SG)", "its like view", 'wallsxp', 380, 225, panel1 )
+    checkbox("ESP:Ply Flat(SG)", "Toggle PNames", 'chams_lighting', 380, 240, panel1 )
+    checkbox("ESP:Prop Flat(SG)", "Toggle PNames", 'pchams_lighting', 380, 255, panel1 )
+    checkbox("ESP:Glow(SG)", "its like glowing", 'glow',380, 270, panel1 )
+    checkbox("CLI:Info", "its like debig", 'getgood', 20, 45, panel1 )
+    checkbox("CLI:Watermark", "its like mark", 'watermark', 20, 30, panel1 )
+    checkbox("CLI:Crosshair", "shootbox", 'crosshair', 20, 60, panel1 )
+    checkbox("CLI:Swasthair", "its like german", 'swasthair', 20, 75, panel1 )
+    checkbox("CLI:Animate Hand(SG)", "its like hand but anim", 'animcham', 20, 90, panel1 )
+    checkbox("CLI:Hand Cham(SG)", "Toggle Hand Cham", 'hands', 20, 105, panel1 )
+    checkbox("CLI:Gay Physgun(SG)", "its like raindno", 'rainbowphys', 20, 120, panel1 )
+    checkbox("CLI:ThirdPerson(SG)", "its like view", 'tps', 20, 135, panel1 )
+    checkbox("CLI:Menu Animate", "its like dance", 'gdance', 20, 150, panel1 )
+    checkbox("CLI:Nightmode(SG)", "its like night", 'nightmode', 20, 165, panel1 )
+    checkbox("CLI:Grabber", "its like grab pred", 'grabber', 20, 180, panel1 )
+    local ptbox = vgui.Create( 'DComboBox', panel1 )
+    ptbox:SetPos( 380, 300 )
     ptbox:SetSize( 115, 20 )
     ptbox:SetValue( 'Cham Material' )
     ptbox:AddChoice('models/debug/debugwhite')
@@ -568,274 +498,186 @@ function SUGUI()
     ptbox:AddChoice('models/XQM/LightLinesRed_tool')
     ptbox:AddChoice('models/props_combine/com_shield001a')
     ptbox:AddChoice('models/props_combine/tprings_globe')
-
     function ptbox:OnSelect( _, mat )
         ss.material = mat
     end
     function ptbox:Paint()
         draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
     end
-    --[[
-    local ptbox2 = vgui.Create( 'DComboBox', menuderma )
-    ptbox2:SetPos( 90, 107 )
-    ptbox2:SetSize( 90, 20 )
-    ptbox2:SetValue( 'Bone' )
-    ptbox2:AddChoice('nose')
-    ptbox2:AddChoice('eyes')
-    ptbox2:AddChoice('tie')
-    ptbox2:AddChoice('chest')
-    ptbox2:AddChoice('pen')
-    ptbox2:AddChoice('hips')
-    ptbox2:AddChoice('lefthand')
-    ptbox2:AddChoice('righthand')
-
-    function ptbox2:OnSelect( _, LookupAttachment )
-        ss.aimpos = LookupAttachment
+    checkbox("MSC:Keypad Logger", "its like Keypads", 'keypads', 20, 30, panel2 )
+    checkbox("MSC:Legit Bhop", "Toggle Bhop", 'bhop', 20, 45, panel2 )
+    checkbox("MSC:Hitmarker", "Player Hitmark", 'hitmarker', 20, 90, panel2 )
+    checkbox("MSC:Hitsound", "Player Hitsound", 'hitsound', 20, 75, panel2 )
+    checkbox("MSC:Rage Bhop", "Toggle Autostrafe", 'autostrafe', 20, 60, panel2 )
+    checkbox("AIM:Fire", "Toggle Aimbot fire", 'fire', 20, 30, panel3 )
+    makelabel("aimkes", "Aimbot Key:", 'Specialneeds2', 100, 10, 245, 30, colors.white, panel3)
+    local binder = vgui.Create( "DBinder", panel3 )
+    binder:SetSize( 40, 15 )
+    binder:SetPos( 305, 30 )
+    binder:SetText('key')
+    function binder:Paint()
+        DrawRect(self, colors.darkgrey, colors.white, self:GetWide(), self:GetTall())
     end
-    function ptbox2:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
-    end]]
-
-
-
-
-    --doMenuModel(MyDerma:GetX()+4JUdGzvrMFDWrUUwY3toJATSeNwjn54LkCnKBPRzDuhzi5vSepHfUckJNxRL2gjkNrSqtCoRUrEDAgRwsQvVCjZbRyFTLRNyDmT1a1boZVred, MyDerma)
-
-    local icon = vgui.Create( "DModelPanel", menuderma )
-    icon:SetSize( 200, 200 )
-    icon:SetPos(15, 310)
-    icon:SetModel( "models/player/hostage/hostage_04.mdl" )
-    function icon:LayoutEntity( ent )
-        if ss.gdance then
-            ent:SetSequence( ent:LookupSequence( "taunt_laugh" ) )
-            if( ent:GetCycle() > 0.97 ) then ent:SetCycle( 0.02 ) end
-            icon:RunAnimation()
-        end
+    function binder:OnChange( num )
+        LocalPlayer():ChatPrint("Aimbot bound to: "..input.GetKeyName( num )) ss.aimkey = num
     end
-    function icon.Entity:GetPlayerColor() return Vector(ss.hchams_col.r / 255, ss.hchams_col.g / 255, ss.hchams_col.b / 255) end
-
+    slider( "SLI:CLI:FOV", "fov", 1, 170, 20, 30, 190, 20, panel4)
+    slider( "SLI:ESP:Ply  A", "chams_a", 1, 255, 20, 45, 190, 20, panel4)
+    slider( "SLI:ESP:Prop A", "pchams_a", 1, 255, 20, 60, 190, 20, panel4)
+    colorthing('chams_col', 20, 30, 150, 150, panel5)
+    colorthing('pchams_col', 20, 200, 150, 150, panel5)
+    colorthing('hchams_col', 360, 30, 150, 150, panel5)
+    colorthing('box_col', 190, 30, 150, 150, panel5)
+    colorthing('glow_col', 190, 200, 150, 150, panel5)
+    colorthing('menu_col', 360, 200, 150, 150, panel5)
+    makelabel("pcham", "Player Chams", 'Specialneeds2', 230, 30, 20, 10, colors.white, panel5)
+    makelabel("pbox", "Box", 'Specialneeds2', 230, 30, 190, 10, colors.white, panel5)
+    makelabel("prcham", "Props Chams", 'Specialneeds2', 230, 30, 20, 180, colors.white, panel5)
+    makelabel("glsa", "Glow", 'Specialneeds2', 230, 30, 190, 180, colors.white, panel5)
+    makelabel("hao", "Hands and Others", 'Specialneeds2', 230, 30, 360, 10, colors.white, panel5)
+    makelabel("mens", "Menu", 'Specialneeds2', 230, 30, 360, 180, colors.white, panel5)
     local DLabelw = vgui.Create( "DLabel", menuderma )
     DLabelw:SetPos( 20, -78 )
     DLabelw:SetSize( 200, 200)
     DLabelw:SetColor(colors.white)
     DLabelw:SetFont('titles')
     DLabelw:SetText( "sug.sol | " )
-
     local DLabelw = vgui.Create( "DLabel", menuderma )
-    DLabelw:SetPos( 110, -78 )
+    DLabelw:SetPos( 105, -78 )
     DLabelw:SetSize( 200, 200)
     DLabelw:SetColor( Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b) )
     DLabelw:SetFont('titles')
     DLabelw:SetText( LocalPlayer():Name() )
-
-    local DLabel = vgui.Create( "DLabel", menuderma )
-    DLabel:SetPos( 20, 80 )
-    DLabel:SetSize( 100, 10)
-    DLabel:SetColor(colors.white)
-    DLabel:SetFont('Specialneeds2')
-    DLabel:SetText( "Aimbot key:" )
-
-
-
-    -----------------------------------
-
-
-    local binder = vgui.Create( "DBinder", menuderma )
-    binder:SetSize( 40, 15 )
-    binder:SetPos( 80, 80 )
-    binder:SetText('key')
-    function binder:Paint()
-        DrawRect(self, colors.darkgrey, colors.white, self:GetWide(), self:GetTall())
-    end
-
-
-    function binder:OnChange( num )
-        LocalPlayer():ChatPrint("Aimbot bound to: "..input.GetKeyName( num )) ss.aimkey = num
-    end
-
-
 end
-
 concommand.Add('ss_menu', SUGUI)
 
 
+--not my ent list 8)
+local showing = true
 
-local ColorDerma = vgui.Create( "DFrame" )
-function cui()
-    ColorDerma:SetSize( 400, 550 )
-    ColorDerma:SetPos( midW - ( ColorDerma:GetWide() / 2 - 650 ), midH - ( ColorDerma:GetTall() / 2) )
-    ColorDerma:SetTitle( " " )
-    ColorDerma:MakePopup()
-    ColorDerma:InvalidateParent(true)
-    ColorDerma:SetDeleteOnClose( false )
-    ColorDerma:ShowCloseButton(false)
-    ColorDerma.Paint = function(s , w , h)
-        draw.RoundedBox(5,5,0,w , h,Color(40,40,40, 250))
+concommand.Add("ShowEnts", function()
+	if showing then
+		showing = false
+	else
+		showing = true
+	end
+end)
+local EntsToShow = {}
+local OtherEnts = {}
+concommand.Add("entlist", function(ply, cmd, args)
+	function Reload(startX, startY)
+		table.Empty(OtherEnts)
+		for k,v in pairs(ents.GetAll()) do
+			local addToAllEnts = true
+
+			for i,p in pairs(EntsToShow) do
+				if p == v:GetClass() then
+					addToAllEnts = false
+				end
+			end
+
+			for i,p in pairs(OtherEnts) do
+				if p == v:GetClass() then
+					addToAllEnts = false
+				end
+			end
+
+			if addToAllEnts then
+				table.insert(OtherEnts, v:GetClass())
+			end
+		end
+		local main = vgui.Create( "DFrame" )
+		main:SetSize( 400, 250 )
+		if startX and startY then
+			main:SetPos(startX, startY)
+		else
+			main:Center()
+		end
+		main:SetTitle( "" )
+		main:SetVisible( true )
+		main:SetDraggable( true )
+		main:ShowCloseButton( false )
+		main:MakePopup()
+		main.Paint = function()
+			draw.RoundedBox( 8, 0, 0, main:GetWide(), main:GetTall(), Color( 40, 40, 40, 255 ) )
+		end
+    local cbutton2 = vgui.Create('DButton', main)
+    cbutton2:SetText('')
+    cbutton2:SetTextColor(colors.black)
+    cbutton2:SetSize(16, 16)
+    cbutton2:SetPos(375, 5)
+    function cbutton2:DoClick()
+        main:Close()
     end
-    local cbutton = vgui.Create('DButton', ColorDerma)
-    cbutton:SetText('X')
-    cbutton:SetTextColor(colors.black)
-    cbutton:SetSize(16, 16)
-    cbutton:SetPos(ColorDerma:GetWide() - cbutton:GetWide() - 5, 5)
-    function cbutton:DoClick()
-        ColorDerma:Close()
-    end
-    function cbutton:Paint()
+    function cbutton2:Paint()
         draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.red)
     end
-
-
-    colorthing('chams_col', 20, 30, 150, 150, ColorDerma)
-    colorthing('pchams_col', 20, 200, 150, 150, ColorDerma)
-    colorthing('hchams_col', 20, 370, 150, 150, ColorDerma)
-
-    colorthing('box_col', 190, 30, 150, 150, ColorDerma)
-    colorthing('glow_col', 190, 200, 150, 150, ColorDerma)
-    colorthing('menu_col', 190, 370, 150, 150, ColorDerma)
---[[
-    local icon = vgui.Create( "DModelPanel", ColorDerma )
-    icon:SetSize( 500, 500 )
-    icon:SetPos(30, 30)
-    icon:SetModel( "models/player/gman_high.mdl" )
-    function icon.Entity:GetPlayerColor() return Vector (255, 255, 255) end
-]]
-    local DLabel3224 = vgui.Create( "DLabel", ColorDerma )
-    DLabel3224:SetPos( 20, 10 )
-    DLabel3224:SetSize( 230, 30)
-    DLabel3224:SetColor(colors.white)
-    DLabel3224:SetFont('Specialneeds2')
-    DLabel3224:SetText("Player Chams")
-    local DLabel23224 = vgui.Create( "DLabel", ColorDerma )
-    DLabel23224:SetPos( 190, 10 )
-    DLabel23224:SetSize( 230, 30)
-    DLabel23224:SetColor(colors.white)
-    DLabel23224:SetFont('Specialneeds2')
-    DLabel23224:SetText("Box")
-
-    local DLabel32242 = vgui.Create( "DLabel", ColorDerma )
-    DLabel32242:SetPos( 20, 185 )
-    DLabel32242:SetSize( 230, 20)
-    DLabel32242:SetColor(colors.white)
-    DLabel32242:SetFont('Specialneeds2')
-    DLabel32242:SetText("Props Chams")
-    local DLabel322424 = vgui.Create( "DLabel", ColorDerma )
-    DLabel322424:SetPos( 190, 185 )
-    DLabel322424:SetSize( 230, 20)
-    DLabel322424:SetColor(colors.white)
-    DLabel322424:SetFont('Specialneeds2')
-    DLabel322424:SetText("Glow")
-
-    local DLabel322412 = vgui.Create( "DLabel", ColorDerma )
-    DLabel322412:SetPos( 20, 353 )
-    DLabel322412:SetSize( 230, 20)
-    DLabel322412:SetColor(colors.white)
-    DLabel322412:SetFont('Specialneeds2')
-    DLabel322412:SetText("Hands and Others")
-    local DLabelx322412 = vgui.Create( "DLabel", ColorDerma )
-    DLabelx322412:SetPos( 190, 353 )
-    DLabelx322412:SetSize( 230, 20)
-    DLabelx322412:SetColor(colors.white)
-    DLabelx322412:SetFont('Specialneeds2')
-    DLabelx322412:SetText("Menu")
-
-
-
-end
-
-concommand.Add('ss_cmenu', cui)
-
-makeHook("OnContextMenuOpen", function()
-    if not ColorDerma:IsVisible() then
-        ColorDerma:Show()
-    else
-        cui()
-    end
+		DermaList = vgui.Create( "DPanelList", main )
+		DermaList:SetPos( 25,25 )
+		DermaList:SetSize( 700, 500 )
+		DermaList:SetSpacing( 75 )
+		DermaList:EnableHorizontal( false )
+		DermaList:EnableVerticalScrollbar( true )
+		local SelectedEnts = vgui.Create("DListView")
+		SelectedEnts:SetSize(150, 200)
+		SelectedEnts:SetPos(0, 0)
+		SelectedEnts:SetMultiSelect(false)
+		SelectedEnts:AddColumn("Ents to show")
+		for k,v in pairs(EntsToShow) do
+			SelectedEnts:AddLine(v)
+		end
+		SelectedEnts.DoDoubleClick = function(parent, index, list)
+			table.remove(EntsToShow, index)
+			main:Close()
+			local x, y = main:GetPos()
+			Reload(x, y)
+		end
+		DermaList:Add(SelectedEnts)
+		local AllEnts = vgui.Create("DListView")
+		AllEnts:SetSize(150, 200)
+		AllEnts:SetPos(200, 0)
+		AllEnts:SetMultiSelect(false)
+		AllEnts:AddColumn("Ents not to show")
+		for k,v in pairs(OtherEnts) do
+			AllEnts:AddLine(v)
+		end
+		AllEnts.DoDoubleClick = function(parent, index, list)
+			table.insert(EntsToShow, OtherEnts[index])
+			main:Close()
+			local x, y = main:GetPos()
+			Reload(x, y)
+		end
+		DermaList:Add(AllEnts)
+	end
+	Reload()
 end)
+makeHook("SHUDPaint", function()
+	if showing then
+		for k,v in pairs(ents.GetAll()) do
+			local drawing = false
 
-makeHook("OnContextMenuClose", function()
-    if ColorDerma:IsVisible() then ColorDerma:Hide() end
+			for i,p in pairs(EntsToShow) do
+				if v:GetClass() == p then
+					drawing = true
+				end
+			end
+
+			if drawing then
+				local stuff = v:GetPos():ToScreen()
+
+				surface.SetTextPos( stuff.x - 15, stuff.y )
+				surface.SetFont("default")
+				local text = v:GetClass()
+				surface.DrawText( text )
+
+				local Width, Height = surface.GetTextSize(text)
+
+				surface.SetDrawColor( 255, 0, 0, 255)
+				surface.DrawOutlinedRect( stuff.x - 20, stuff.y, Width + 10, Height + 5)
+			end
+		end
+	end
 end)
-
-
---[[
-local f = vgui.Create( "DFrame" )
-function fui()
-    f:SetSize( 350, 75 )
-    f:SetPos( midW - ( f:GetWide() / 2 - 0 ), midH - ( f:GetTall() / 2) )
-    f:SetTitle( " " )
-    f:MakePopup()
-    f:InvalidateParent(true)
-    f:SetDeleteOnClose( false )
-    f:ShowCloseButton(false)
-    f.Paint = function(s , w , h)
-        draw.RoundedBox(5,5,0,w , h,Color(40,40,40, 250))
-    end
-    local cbutton = vgui.Create('DButton', f)
-    cbutton:SetText('X')
-    cbutton:SetTextColor(colors.black)
-    cbutton:SetSize(16, 16)
-    cbutton:SetPos(f:GetWide() - cbutton:GetWide() - 5, 5)
-    function cbutton:DoClick()
-        f:Close()
-    end
-    function cbutton:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.red)
-    end
-
-    local friends = vgui.Create( 'DComboBox', f )
-    friends:SetPos( 150, 20 )
-    friends:SetSize( 115, 20 )
-    friends:SetValue( 'Friend 2' )
-    makeHook('Think' function()
-        for k, v in ipairs(player.GetAll()) do
-            friends:AddChoice(v:Nick())
-        end
-    end)
-
-
-    function friends:OnSelect( _, val )
-        ss.friends1 = v:Nick()
-    end
-    function friends:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
-    end
-
-    local friendss = vgui.Create( 'DComboBox', f )
-    friendss:SetPos( 20, 20 )
-    friendss:SetSize( 115, 20 )
-    friendss:SetValue( 'Friend 1' )
-    makeHook('Think' function()
-        for k, v in ipairs(player.GetAll()) do
-            friends:AddChoice(v:Nick())
-        end
-    end)
-
-
-    function friendss:OnSelect( _, val )
-        ss.friends2 = v:Nick()
-    end
-    function friendss:Paint()
-        draw.RoundedBox(5, 0, 0, self:GetWide(), self:GetTall(), colors.black)
-    end
-end
-
-concommand.Add('ss_fmenu', fui)
-
-makeHook("OnContextMenuOpen", function()
-    if not f:IsVisible() then
-        f:Show()
-    else
-        fui()
-    end
-end)
-
-makeHook("OnContextMenuClose", function()
-    if f:IsVisible() then f:Hide() end
-end)
-]]
---[[-------------------------------------------------------------------------
-    Move Stuff
----------------------------------------------------------------------------]]
 
 local function bhop(cmd)
     if LocalPlayer():GetMoveType() == MOVETYPE_NOCLIP or LocalPlayer():InVehicle() or LocalPlayer():GetMoveType() == 8 then return end
@@ -844,18 +686,33 @@ local function bhop(cmd)
     end
 end
 
-hook.Add("CreateMove", "CMoveStuff", function(cmd)
+local origAngle = Angle(0,0,0)
+makeHook("CreateMove",function(ucmd)
+  if ss.autostrafe then
+    if(!IsValid(LocalPlayer())) then return end
+    if (!origAngle) then origAngle = ucmd:GetViewAngles() end
+    origAngle = (origAngle + Angle(ucmd:GetMouseY() * 0.023, ucmd:GetMouseX() * -0.023, 0))
+    origAngle.p, origAngle.y, origAngle.x = math.Clamp(origAngle.p, -89, 89), math.NormalizeAngle(origAngle.y), math.NormalizeAngle(origAngle.x)
+
+    if(ucmd:CommandNumber() == 0) then
+        ucmd:SetViewAngles(origAngle)
+        return
+    end
+    if(!input.IsKeyDown(KEY_SPACE) or LocalPlayer():IsOnGround()) then return end
+    ucmd:RemoveKey(IN_JUMP)
+    if(engine.TickCount() % 2 == 0) then
+        ucmd:SetSideMove(10000)
+        ucmd:SetViewAngles(LerpAngle(0.6,ucmd:GetViewAngles(),Angle(0,origAngle.y + 3,0)))
+    else
+        ucmd:SetSideMove(-10000)
+        ucmd:SetViewAngles(LerpAngle(0.6,ucmd:GetViewAngles(),Angle(0,origAngle.y - 3,0)))
+    end
+  end
+end)
+
+makeHook("CreateMove", function(cmd)
     if ss.bhop then bhop(cmd) end
 end)
-------
-
-
-
---[[-------------------------------------------------------------------------
-    Esp Stuff
----------------------------------------------------------------------------]]
-
-
 
 local function closestEntByClass(class)
     local pltbl = {}
@@ -882,10 +739,6 @@ local function getTextSize(font,str)
     return surface.GetTextSize(str)
 end
 
-
-
-
-
 function tespProp(v)
     local text = ''
     local pos = v:LocalToWorld(v:OBBCenter()):ToScreen()
@@ -898,20 +751,11 @@ function tespProp(v)
 end
 
 makeHook("SHUDPaint", function()
-
-
     local propTarget = closestEntByClass("prop_physics")
     for k, v in pairs(propTarget) do
         if ss.txtespPROP then tespProp(v) end
     end
 end)
-
-
-
---[[-------------------------------------------------------------------------
-    Fov Stuff
----------------------------------------------------------------------------]]
-
 makeHook("CalcView", function( p, o, a, f )
     local view = {}
     local fov = ss.fov - ( GetConVar ("fov_desired"):GetFloat() - f )
@@ -919,175 +763,64 @@ makeHook("CalcView", function( p, o, a, f )
     return view
 end)
 
-
---[[-------------------------------------------------------------------------
-    Hud Stuff
----------------------------------------------------------------------------]]
-
-
-surface.CreateFont( "Propsenseamon", {
-    font = "Arial",
-    extended = false,
-    size = 20,
-    weight = 200,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = false,
-} )
-
-surface.CreateFont( "boosls", {
-    font = "Arial",
-    extended = false,
-    size = 14,
-    weight = 200,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = false,
-} )
-
-surface.CreateFont( "booslssd", {
-    font = "Arial",
-    extended = false,
-    size = 16,
-    weight = 200,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = false,
-} )
-
-surface.CreateFont( "Propsenseamon2", {
-    font = "Arial",
-    extended = false,
-    size = 20,
-    weight = 400,
-    blursize = 0,
-    scanlines = 0,
-    antialias = true,
-    underline = false,
-    italic = false,
-    strikeout = false,
-    symbol = false,
-    rotary = false,
-    shadow = false,
-    additive = false,
-    outline = false,
-} )
+local function sdrawtext( string, font,  x, y, color )
+      surface.SetFont( font )
+      surface.SetTextColor( color )
+      surface.SetTextPos( x,y )
+      surface.DrawText( string )
+end
+makeHook("Think", function()
+    health = lply:Health()
+    armor = lply:Armor()
+    kills = lply:Frags()
+    deaths = lply:Deaths()
+    velocity = math.Round(lply:GetVelocity():Length())
+    playerlist = player.GetCount()
+    fps = math.floor(1 / FrameTime())
+    --Ping
+end)
 
 local function watermark()
         if ss.watermark then
             draw.RoundedBox(0,1746,6,155+8 , 25 + 8,Color(90,90,90))
             draw.RoundedBox(0,1750,10,155,25,Color(25,25,25))
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos( 1760, 12 )
-            surface.SetFont( "Propsenseamon" )
-            surface.DrawText( "Sugoma.Solutions" )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos( 2, 2 )
-            surface.SetFont( "booslssd" )
-            surface.DrawText( "Logged in as:")
-
-            surface.SetTextColor( Color(ss.menu_col.r, ss.menu_col.g, ss.menu_col.b) )
-            surface.SetTextPos( 80, 2 )
-            surface.SetFont( "booslssd" )
-            surface.DrawText(LocalPlayer():Name())
-
-
+            DrawText(Color(255, 255, 255),1760, 12,"Sugoma.Solutions","Propsenseamon")
         end
-
     end
 
 local function infoshow()
         if ss.getgood then
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,35)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "FrameTime:"..RealFrameTime() )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,50)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "FrameNumber:"..FrameNumber() )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,65)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "GUIFrameTime:"..VGUIFrameTime() )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,80)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "SrvrPing:"..LocalPlayer():Ping() )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,95)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "Team:"..team.GetName( LocalPlayer():Team() ) )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,110)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "SteamID64:"..LocalPlayer():SteamID64() )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,125)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "SteamID:"..LocalPlayer():SteamID() )
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos(5,140)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "Name:"..LocalPlayer():Name() )
+          draw.RoundedBox( 5, 10, 10, 200, 40, Color(30,30,30))
+            draw.RoundedBox( 5, 10, 10, 200, 350, Color(30,30,30,230))
+            draw.RoundedBox( 0, 10, 50, 200, 2, Color(255,255,255))
+            sdrawtext("Info", "infotitle", 200/2-5, 25, Color(255,255,255))
+            local healthColor = math.Clamp(lply:Health(), 0, 100)
+            sdrawtext("Health", "infos", 15, 60, Color(255,255,255))
+            sdrawtext(health, "infos", 80, 60, HSVToColor( healthColor / 100 * 120, 1, 1 ))
+            sdrawtext("Armor:", "infos", 15, 95, Color(255,255,255))
+            local armorColor = math.Clamp(lply:Armor(), 100, 100)
+            sdrawtext(armor, "infos", 80, 95, HSVToColor(armorColor / 100 * 56,225,225))
+            sdrawtext("Kills:", "infos", 15, 130, Color(255,255,255))
+            sdrawtext(kills, "infos", 55, 130, Color(255,255,255))
+            sdrawtext("Deaths:", "infos", 15, 165, Color(255,255,255))
+            sdrawtext(deaths, "infos", 85, 165, Color(255,255,255))
+            sdrawtext("Velocity:", "infos", 15, 200, Color(255,255,255))
+            sdrawtext(velocity, "infos", 95, 200, Color(255,255,255))
+                if velocity >= 1000 then
+                    sdrawtext(velocity, "infos", 95, 200, HSVToColor((CurTime() * 300 ) % 360, 1, 1 ))
+                end
+            sdrawtext("FPS:", "infos", 15, 235, Color(255,255,255))
+            sdrawtext(fps, "infos", 59, 235, Color(255,255,255))
+                if fps <= 60 then
+                    sdrawtext(fps, "infos", 59, 235, Color(255,0,0))
+                end
+            sdrawtext("Ping:", "infos", 15, 270, Color(255,255,255))
+            sdrawtext(lply:Ping(), "infos", 61, 270, Color(255,255,255))
+            sdrawtext("Players:", "infos", 15, 305, Color(255,255,255))
+            sdrawtext(playerlist, "infos", 88, 305, Color(255,255,255))
         end
     end
 
-local function legitaims()
-        if ss.getgood and ss.softaimbot then
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos( midW + 10, midH + 20)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "LegitAim" )
-
-        end
-    end
-
-local function aimkeys()
-        if ss.getgood then
-
-            surface.SetTextColor( 255, 255, 255 )
-            surface.SetTextPos( midW + 10, midH + 10)
-            surface.SetFont( "boosls" )
-            surface.DrawText( "Aimbot key = "..input.GetKeyName( ss.aimkey ) )
-
-        end
-    end
 
 local function drawcross()
         if ss.crosshair then
@@ -1101,16 +834,7 @@ makeHook("SHUDPaint" , function()
     watermark()
     drawcross()
     infoshow()
-    aimkeys()
-    legitaims()
 end)
-
---[[-------------------------------------------------------------------------
-    Aim
-    Stuff
----------------------------------------------------------------------------]]
-
-ss.aimkey = KEY_DOWN --place holder cuz nobody uses this key
 
 function predict(cmd,target, predPos)
     predPos = predPos + (ply:GetVelocity() * engine.TickInterval() * RealFrameTime() ) - (me:GetVelocity(me) * engine.TickInterval() * RealFrameTime() )
@@ -1157,7 +881,7 @@ local function doFire(cmd)
     end
 end
 
-hook.Add("CreateMove","", function(cmd)
+makeHook("CreateMove", function(cmd)
     if cmd:CommandNumber() == 0 then end
     if not input.IsKeyDown(ss.aimkey) then return end
     if not lply:IsValid() or not lply:Alive() then return end
@@ -1180,15 +904,6 @@ hook.Add("CreateMove","", function(cmd)
         end
     end
 end)
-------------------------------------
-
-
-
-
---[[-------------------------------------------------------------------------
-    esp  Stuff
----------------------------------------------------------------------------]]
-
 
 local function chams(v)
     v:SetColor(Color(0,0,0,0))
@@ -1315,7 +1030,6 @@ makeHook('SHUDPaint', function()
         end
     end
 end)
-
 local ent = FindMetaTable("Entity")
 local vec = FindMetaTable("Vector")
 
@@ -1379,31 +1093,6 @@ makeHook("SHUDPaint", function()
         end
     end
 end)
---[[]
-hook.Add("HUDPaint", "ballsxcssss", function()
-    if ss.txtespPLAYER then
-        for k, v in pairs(player.GetAll()) do
-
-            if not v:Alive() then continue end
-            if v:IsDormant() then continue end
-            if v == LocalPlayer() then continue end
-            local hp = v:Health()
-            local offset = Vector(0, 0, 15)
-            local pos = (v:EyePos() + offset):ToScreen()
-            local health = math.Clamp(v:Health(), 0, 100)
-            local hpdraw = HSVToColor( health / 100 * 120, 1, 1 )
-
-            surface.SetFont( "DermaDefault" )
-            surface.SetTextColor( HSVToColor( health / 100 * 120, 1, 1 ) )
-            surface.SetTextPos( pos.x, pos.y )
-            surface.DrawText( hp )
-
-        end
-    end
-end)
-]]
-
-
 
 makeHook('SHUDPaint', function()
     if ss.circlehead then
@@ -1455,10 +1144,6 @@ makeHook('RenderScreenspaceEffects', function()
         end
     end
 end)
-
----------------------------------------------------
---/////////////////////////////////////////////////--
-
 local whitemat = CreateMaterial('? ' .. tostring(CurTime()), 'UnlitGeneric',{
     ['$basetexture'] = 'color/white',
     ['$model'] = 1,
@@ -1491,18 +1176,14 @@ makeHook("SHUDPaint", function()
                     end
                     render.DrawWireframeBox(pos, Angle(0, 0, 0), mins, maxs, Color(ss.box_col.r, ss.box_col.g, ss.box_col.b), false )
                 end
-                render.SetColorModulation(1, 1, 1)
-                render.SetMaterial(nil)
+                --render.SetColorModulation(1, 1, 1)
+                --render.SetMaterial( whitemat )
                 render.SuppressEngineLighting(false)
             cam.End3D()
         end
     end
 end)
 
-------------
-
-
----------------------
 
 gameevent.Listen("player_hurt")
 local function hitSound(data)
@@ -1515,10 +1196,6 @@ local function hitSound(data)
 end
 
 makeHook("player_hurt", hitSound)
-
-----------------------------------------------
-
-
 local should_follow = CreateClientConVar( "follow", "0")
 local should_draw = CreateClientConVar( "follow_draw", "1")
 local follow_team = CreateClientConVar( "follow_team", "0", true, false, "0 follow any team, 1 follow same team as localplayer, 2 follow opposite team as localplayer")
@@ -1590,28 +1267,9 @@ if ballz == 1 then
 else
     RunConsoleCommand("follow", "0")
 end
-
----------------
-
-
------------------------------------------------------
-
-
-
-
-
-
-
-
 makeHook('ShouldDrawLocalPlayer', function()
     return ss.tps
 end)
-
-
-
-
-
-
 makeHook('DrawPhysgunBeam', function(ply, _, enabled, target, _, hitPos)
     if enabled and isValid(target) and ply == lply then
         dbg.curprop = target
@@ -1624,19 +1282,6 @@ makeHook('DrawPhysgunBeam', function(ply, _, enabled, target, _, hitPos)
         dbg.beamang = ply:EyeAngles()
     end
 end)
-
-
---[[
-
---------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
--------------------------------------------------
------------------------------------------------------------
-]]
-
-
-
-
 makeHook('PreDrawEffects', function()
     if ss.grabber then
         cam.Start3D2D(dbg.beampos,dbg.beamang+Angle(90,0,0),1)
@@ -1696,15 +1341,6 @@ makeHook('PreDrawEffects', function()
         cam.End3D()
     end
 end)
-
--------------------
-
-
-
-
-
-------------------------------------------------------------------------------------------------------------------------------------------
-
 local AKPL = (file.Read("akpl.dat") != nil && util.JSONToTable(util.Decompress(file.Read("akpl.dat"))) || {})
 
 // internal calculations
@@ -1945,7 +1581,7 @@ makeHook( "CalcView", function( ply, pos, angles, fov )
     end
 end )
 
-hook.Add("SetupWorldFog", "nightmode", function()
+makeHook("SetupWorldFog", function()
 	if ss.nightmode then
         render.FogMode( 1 )
         render.FogColor( 0, 0, 0 )
@@ -1955,7 +1591,7 @@ hook.Add("SetupWorldFog", "nightmode", function()
         return true
     end
 end)
-hook.Add("SetupSkyboxFog", "nightmode", function()
+makeHook("SetupSkyboxFog", function()
     if ss.nightmode then
         render.FogMode( 1 )
         render.FogColor( 0, 0, 0 )
@@ -2014,7 +1650,7 @@ local function draw_svaston(x, y, size)
     rotationdegree = rotationdegree + (frametime * 150)
 end
 
-hook.Add("SHUDPaint","1",function()
+makeHook("SHUDPaint", function()
     if ss.swasthair then
         local screenW, screenH = ScrW() ,ScrH()
         draw_svaston(screenW / 2, screenH / 2, screenH /2)
@@ -2056,7 +1692,7 @@ local IsDrawingGlow = false
 local Glow = CreateMaterial("edgeglow","UnlitGeneric",weaponparams)
 local GlowTwo = CreateMaterial("edgeglow2","UnlitGeneric", armparams)
 
-hook.Add("PreDrawViewModel", "PreViewModelChams", function()
+makeHook("PreDrawViewModel", function()
     if ss.animcham then
         render.SuppressEngineLighting(true)
         if IsDrawingGlow then
@@ -2069,7 +1705,7 @@ hook.Add("PreDrawViewModel", "PreViewModelChams", function()
     end
 end)
 
-hook.Add("PostDrawViewModel", "PostViewModelChams", function()
+makeHook("PostDrawViewModel", function()
     if ss.animcham then
         render.SetColorModulation(1, 1, 1)
         render.MaterialOverride(None)
@@ -2098,7 +1734,7 @@ local function propkill()
     end
 
 
-    hook.Add("CreateMove", "PKill", function(cmd)
+    makeHook("CreateMove", function(cmd)
         cmd:SetMouseWheel(100)
     end)
 
@@ -2128,7 +1764,7 @@ surface.CreateFont(
     {font = "Bahnschrift", extended = false, size = 30, blursize = 4, weight = 1000, antialias = true}
 )
 local a = {}
-hook.Add("SHUDPaint", "123", function()
+makeHook("SHUDPaint", function()
     if ss.hitmarker then
         local b = {}
             for c, d in pairs(a) do
@@ -2160,7 +1796,7 @@ hook.Add("SHUDPaint", "123", function()
     end
 )
 gameevent.Listen("player_hurt")
-hook.Add("player_hurt", "11", function(i)
+makeHook("player_hurt", function(i)
     if ss.hitmarker then
             local j = 0
             for d, l in pairs(player.GetAll()) do
@@ -2186,7 +1822,7 @@ hook.Add("player_hurt", "11", function(i)
     end
 )
 
-hook.Add("Think","z",function()
+makeHook("Think", function()
     if ss.rainbowphys then
         local RainbowPlayer=HSVToColor(CurTime()% 6*60,1,1) LocalPlayer():SetWeaponColor(Vector(RainbowPlayer.r/255,RainbowPlayer.g/255,RainbowPlayer.b/255)) LocalPlayer():SetPlayerColor(Vector(RainbowPlayer.r/255,RainbowPlayer.g/255,RainbowPlayer.b/255))
     end
@@ -2274,10 +1910,27 @@ timer.Create("timerms",0.1, 0, function()
     end
 end)
 
+concommand.Add( "neofetch", function()
+
+		MsgC(Color(255,0,0), [[
+            __,__
+   .--.  .-"     "-.  .--.      Cheat: Sugoma Solutions v2
+  / .. \/  .-. .-.  \/ .. \     Kernel: your mother
+ | |  '|  /   Y   \  |'  | |    Uptime: idk you tell me
+ | \   \  \ 0 | 0 /  /   / |    Packages: Who?
+  \ '- ,\.-"`` ``"-./, -' /     Shell: Gmod console
+   `'-' /_   ^ ^   _\ '-'`      Resolution: Asked
+       |  \._   _./  |          Desktop Enviroment: Garry's mod
+       \   \ `~` /   /          Memory: broke
+        '._ '-=-' _.'
+           '~---~'
+    ]])
+
+end)
+
+
+
+
 --thanks times hack lol
-
- print("\n")
- MsgC(Color(61, 149, 217), " ¦¦¦¦¦¦¦+¦¦+¦¦¦¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦¦¦¦¦¦+¦¦¦¦¦¦+¦¦¦+¦¦¦¦¦\n¦¦+----+¦¦¦¦¦¦¦¦¦¦¦+----+¦¦¦¦¦¦+----+¦¦+--¦¦+¦¦¦¦¦¦¦¦\n+¦¦¦¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦+¦¦¦¦+¦¦¦¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦\n¦+---¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦+¦¦+¦¦¦¦+---¦¦+¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦\n¦¦¦¦¦¦+++¦¦¦¦¦¦+++¦¦¦¦¦¦++¦¦+¦¦¦¦¦¦+++¦¦¦¦¦++¦¦¦¦¦¦¦+\n+-----+¦¦+-----+¦¦+-----+¦+-++-----+¦¦+----+¦+------+\n")
-
  notification.AddLegacy("sug.sol loaded, have fun. Check console for info!", NOTIFY_HINT, 5)
  surface.PlaySound( "buttons/button15.wav" )
