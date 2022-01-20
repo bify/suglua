@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Sugoma Solutions](https://imgur.com/a/RZOxbtf)](https://sugoma.solutions/)
+[![Sugoma Solutions](https://github.com/bify/suglua/blob/main/sswater.PNG)](https://sugoma.solutions/)
 
 <h2>CORS Middleware</h2>
 
